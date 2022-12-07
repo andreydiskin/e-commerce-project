@@ -9,9 +9,20 @@ export const CurrencyContext = createContext();
 export const CurrencyContextProvider = (props) => {
     const [currency, setCurrency] = useState(nis);
 
+    useEffect(() => {
+        if (localStorage.getItem('currency')) {
+            setCurrency(localStorage.getItem('currency'));
+        }
+    }, []);
+
+    useEffect(() => {
+        localStorage.setItem('currency', currency);
+    }, [currency]);
+
 
 
     const currPrice = (price) => {
+        console.log("currency",currency)
         if (currency === usd) {
             return `$${calcFromNisToUsd(price)}`;
         } 
@@ -24,7 +35,7 @@ export const CurrencyContextProvider = (props) => {
     const returnCurrencyIcon = currency === nis ? '₪' : '$';
 
     const calcFromNisToUsd = (nis) => {
-        return nis / 3.3;
+        return (nis / 3.3).toFixed(2);
     };
     
     return (

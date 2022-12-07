@@ -1,0 +1,32 @@
+export const mockItems = [{
+    id:1,
+    name: 'Biscuits',
+    type: 'regular',
+    category: 'food',
+    price: 25,
+    description: 'Biscuits for dogs',
+    amount: 1,
+    pic: 'https://www.91-img.com/gallery_images_uploads/3/d/3df5ca6a9b470f715b085991144a5b76e70da975.JPG?tr=h-550,w-0,c-at_max',
+
+},
+{
+    id:2,
+    name: 'ToyTruck',
+    type: 'regular',
+    category: 'toys',
+    price: 80,
+    description: 'Toy Truck for dogs',
+    amount: 1,
+    pic: 'https://www.91-img.com/gallery_images_uploads/3/d/3df5ca6a9b470f715b085991144a5b76e70da975.JPG?tr=h-550,w-0,c-at_max',
+},
+{
+    id:3,
+    name:'iphone',
+    description: 'iphone 12',
+    type: 'taxable',
+    category: 'electronics',
+    price: 4000,
+    amount: 1,
+    pic: 'https://www.91-img.com/gallery_images_uploads/3/d/3df5ca6a9b470f715b085991144a5b76e70da975.JPG?tr=h-550,w-0,c-at_max',
+},
+    ]

@@ -10,6 +10,8 @@ import SidePanel from "./components/SidePanel/SidePanel";
 import HomePage from "./pages/HomePage/HomePage";
 import AuthModal from "./components/AuthModal/AuthModal";
 import SearchPage from "./pages/Search/SearchPage";
+import ItemPage from "./pages/ItemPage/ItemPage";
+import MyCartList from "./pages/MyCartList/MyCartList";
 import { SecureRoute } from "./Auth/SecureRoute";
 import { Typography } from "@mui/material";
 import { ToastContextProvider } from "./context/toastContext";
@@ -53,11 +55,21 @@ function App() {
             }
 
             <Route path="/search" element={<SearchPage />} />
+            <Route path="/search/:id" element={<ItemPage />} />
+
+            <Route
+              path="/cart"
+              element={
+                <SecureRoute role="user">
+                  <MyCartList />
+                </SecureRoute>
+              }
+            />
 
             <Route path="*" element={<PageNotFound />} />
           </Routes>
           </CurrencyContextProvider>
-              {/* for the modal opening logic */}
+              {/* for the modal opeaning logic */}
           <AuthModal
             isLoginModalOpen={isLoginModalOpen}
             isLogin={isLogin}

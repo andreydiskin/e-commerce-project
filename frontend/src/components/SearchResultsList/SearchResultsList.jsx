@@ -20,7 +20,7 @@ export default function SearchResultsList(props) {
     return (
       <Box>
         <Typography className="noResHeader" variant="h5">
-          No results found.. :(
+          No Items Found!
         </Typography>
       </Box>
     );

@@ -13,7 +13,6 @@ import "./SearchForm.css";
 import * as yup from "yup";
 import { toastContext } from "../../context/toastContext";
 import { CurrencyContext } from "../../context/currencyContext";
-import { getItemsByQueryService } from "../../services/itemsApiCalls";
 
 const searchValidationSchema = yup.object({
   minHeight: yup.number("Only numbers").positive("Must be a positive number"),
@@ -34,10 +33,8 @@ export default function SearchForm(props) {
       type: "",
       category: "",
       name: "",
-      minHeight: "",
-      maxHeight: "",
-      minWeight: "",
-      maxWeight: "",
+      minPrice: "",
+      maxPrice: "",
     },
     validationSchema: searchValidationSchema,
 
@@ -47,7 +44,7 @@ export default function SearchForm(props) {
 
       try {
         props.setIsLoading(true);
-        await getItemsByQueryService(query, props.setSearchPets);
+        //await getPetsByQueryService(query, props.setSearchPets);
         props.setIsLoading(false);
       } catch (err) {
         openToast(err.message, "error");
@@ -58,12 +55,11 @@ export default function SearchForm(props) {
 
   useEffect(() => {
     if (formType === "basic") {
-      formik.setFieldValue("minHeight", "");
-      formik.setFieldValue("maxHeight", "");
-      formik.setFieldValue("minWeight", "");
-      formik.setFieldValue("maxWeight", "");
+      formik.setFieldValue("minPrice", "");
+      formik.setFieldValue("maxPrice", "");
       formik.setFieldValue("category", "");
       formik.setFieldValue("name", "");
+      formik.setFieldValue("type", "");
     }
   }, [formType]);
 

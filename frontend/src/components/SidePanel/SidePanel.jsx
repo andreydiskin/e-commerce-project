@@ -6,7 +6,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import SearchIcon from "@mui/icons-material/Search";
 import PetsIcon from "@mui/icons-material/Pets";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-
+import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import "./SidePanel.css";
 import SidePanelItem from "./SidePanelItem";
@@ -32,7 +32,7 @@ export default function SidePanel(props) {
         secured={true}
         role="user"
         linkName="My Cart"
-        to="/cart/:id"
+        to="/cart"
         iconCompoment={<ShoppingCartIcon />}
       />
       <Divider />
@@ -42,6 +42,14 @@ export default function SidePanel(props) {
         linkName="Wishlist"
         to="/wishlist/:id"
         iconCompoment={<ReceiptLongIcon />}
+      />
+
+<SidePanelItem
+        secured={true}
+        role="user"
+        linkName="Purchased"
+        to="/purchased/:id"
+        iconCompoment={<ShoppingBasketIcon />}
       />
 
       <SidePanelItem
