@@ -8,16 +8,25 @@ import { Routes, Route } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import SidePanel from "./components/SidePanel/SidePanel";
 import HomePage from "./pages/HomePage/HomePage";
-import AuthModal from "./components/AuthModal/AuthModal";
+import AuthModal from "./components/MyModal/MyModal";
 import SearchPage from "./pages/Search/SearchPage";
-import ItemPage from "./pages/ItemPage/ItemPage";
-import MyCartList from "./pages/MyCartList/MyCartList";
+import PetPage from "./pages/ItemPage/ItemPage";
+import ProfileSettings from "./pages/ProfileSettings/ProfileSettings";
+import AdminPage from "./pages/AdminPage/AdminPage";
+import AdminDashBoard from "./components/Admin/AddPetForm/AdminDashBoard/AdminDashBoard";
+import UserDetails from "./pages/UserDetails/UserDetails";
 import { SecureRoute } from "./Auth/SecureRoute";
 import { Typography } from "@mui/material";
 import { ToastContextProvider } from "./context/toastContext";
 import PageNotFound from "./pages/PageNotFound/PageNotFound";
 import ProfileSettingsForm from "./components/ProfileSettingsForm/ProfileSettingsForm";
 import { CurrencyContextProvider } from "./context/currencyContext";
+import MyItemsList from "./pages/MyItemsList/MyItemsList";
+import ItemPage from "./pages/ItemPage/ItemPage";
+import AddItemForm from "./components/Admin/AddPetForm/AddItemForm";
+import EditItemPage from "./pages/EditItemPage/EditItemPage";
+import AuthForm from "./components/AuthForm/AuthForm";
+import MyModal from "./components/MyModal/MyModal";
 
 function App() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -56,25 +65,52 @@ function App() {
 
             <Route path="/search" element={<SearchPage />} />
             <Route path="/search/:id" element={<ItemPage />} />
-
+            
+            <Route path="/items/edit/:id" element={<EditItemPage />} />
             <Route
               path="/cart"
               element={
                 <SecureRoute role="user">
-                  <MyCartList />
+                  <MyItemsList purchasedAble={true} amountEditable={true} listHeader="my cart list" />
+                </SecureRoute>
+              }
+            />
+             <Route
+              path="/wishlist"
+              element={
+                <SecureRoute role="user">
+                  <MyItemsList listHeader="My wishlist" />
                 </SecureRoute>
               }
             />
 
+
+            <Route
+              path="/admin"
+              element={
+                <SecureRoute role="admin">
+                  <AdminPage />
+                </SecureRoute>
+              }
+            >
+              <Route path="" element={<AdminDashBoard />} />
+              <Route path="additem" element={<AddItemForm />} />
+              <Route path="user/:id" element={<UserDetails />} />
+            </Route>
+
             <Route path="*" element={<PageNotFound />} />
           </Routes>
           </CurrencyContextProvider>
-              {/* for the modal opeaning logic */}
-          <AuthModal
-            isLoginModalOpen={isLoginModalOpen}
+       
+          <MyModal
+            isOpen={isLoginModalOpen}
             isLogin={isLogin}
-            setIsLoginModalOpen={setIsLoginModalOpen}
-          />
+            setIsOpen={setIsLoginModalOpen}
+          >
+         
+            
+
+          </MyModal>
         </ToastContextProvider>
       </Container>
 

@@ -21,3 +21,34 @@ body {
 .homePageCon {
   text-align: center;
 }
+
+.MuiBox-root.itemsShowCaseCon{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+width: 100%;
+  margin: auto;
+  margin-bottom: 30px;
+  margin-top: 30px;
+}
+
+.MuiBox-root.suggestedCardCon{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 70%;
+  margin: auto;
+}
+
+ .MuiPaper-root.itemShowCase {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  
+  width: 30%;
+  height: 100%;
+ 
+}

@@ -2,8 +2,11 @@ import React, { useContext } from "react";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import "./ProfileSettingsForm.css";
-import { ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
+import { Alert, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
+import Button from "@mui/material/Button";
+import { useFormik } from "formik";
 import * as yup from "yup";
+import TextareaAutosize from "@mui/material/TextareaAutosize";
 import { authContext } from "../../context/authContext";
 import Loader from "../common/Loader/Loader";
 import { updateProfileService } from "../../services/usersApiCalls";
@@ -52,12 +55,15 @@ const inputs = [
       { optionName: "credit", value: "Credit" },
     ],
   },
+
 ];
+
+
 
 export default function ProfileSettingsForm(props) {
   const { user, updateUser } = useContext(authContext);
   const { openToast } = useContext(toastContext);
-  const { currency, setCurrency } = useContext(CurrencyContext);
+  const {currency, setCurrency} = useContext(CurrencyContext);
 
   const defaultConfig = {
     email: user.email || "",
@@ -70,6 +76,10 @@ export default function ProfileSettingsForm(props) {
     paymentMethod: user.paymentMethod || "",
   };
 
+
+
+  
+
   const handleUpdateProfile = async (values) => {
     try {
       await updateProfileService(user._id, updateUser, values);
@@ -80,30 +90,33 @@ export default function ProfileSettingsForm(props) {
     }
   };
 
+ 
+
   if (!user) {
     return <Loader />;
   }
   return (
+
     <Box className="ProfileSettingsformCon">
-      <ToggleButtonGroup
+     <ToggleButtonGroup
         color="primary"
         value={currency}
         exclusive
-        onChange={(e, value) => setCurrency(value)}
+        onChange={(e,value)=>setCurrency(value)}
         aria-label="Platform"
       >
         <ToggleButton value={nis}>₪</ToggleButton>
         <ToggleButton value={usd}>$</ToggleButton>
       </ToggleButtonGroup>
 
-      <MyForm
-        validationSchema={validationSchema}
-        header={"Edit Profile"}
-        inputs={inputs}
-        submitMsg={"save"}
-        deafultConfig={defaultConfig}
-        callback={handleUpdateProfile}
-      />
+        
+      <MyForm    
+      validationSchema={validationSchema}
+          header={"Edit Profile"}
+          inputs={inputs}
+          submitMsg={"save"}
+          deafultConfig={defaultConfig}
+          callback={handleUpdateProfile}/>
     </Box>
   );
 }

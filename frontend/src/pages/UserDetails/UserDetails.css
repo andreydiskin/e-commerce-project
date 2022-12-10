@@ -1,0 +1,7 @@
+.userDataCon .MuiCard-root.petCard{
+    margin: auto;
+    margin-bottom: 30px;
+    width: 30%;
+    /* height: 100%; */
+    text-align: center;
+}

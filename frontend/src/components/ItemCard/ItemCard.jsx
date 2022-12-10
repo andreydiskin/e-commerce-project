@@ -8,6 +8,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
 import { imagesBaseUrl } from "../../Lib/config";
+import { adoptPetService } from "../../services/petsApiCalls";
 import { authContext } from "../../context/authContext";
 import { toastContext } from "../../context/toastContext";
 import { CurrencyContext } from "../../context/currencyContext";
@@ -23,7 +24,7 @@ export default function ItemCard(props) {
   const navigate = useNavigate();
   const remove = async () => {
     try {
-      //await adoptPetService(props.data._id, true, (s) => console.log(s));
+      await adoptPetService(props.data._id, true, (s) => console.log(s));
       openToast("Pet adopted", "success");
       navigate("/search/" + props.data._id);
     } catch (error) {
@@ -54,7 +55,7 @@ export default function ItemCard(props) {
             {currPrice(props.data.price)}
           </Typography>
         )}
-          {props.showStatus && (
+          {props.showStatus && props.amountEditable && (
             <div className="amountCon">
             <Typography gutterBottom variant="h7" component="div">
               amount:
@@ -72,7 +73,7 @@ export default function ItemCard(props) {
       <CardActions>
         {isUser && props.showStatus && (
           <>
-       
+       {props.amountEditable && 
                 <Button
                   onClick={()=>edit(props.data.amount)}
                   className="adpBtn"
@@ -82,10 +83,10 @@ export default function ItemCard(props) {
                  {editMode ? "Save" : "Edit"}
                 </Button>
               
-
+}
           
               <Button
-                onClick={remove}
+                onClick={()=>props.removeCallback(props.data.id)}
                 className="adpBtn"
                 variant="outlined"
                 size="small"

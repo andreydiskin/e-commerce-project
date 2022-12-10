@@ -1,8 +1,8 @@
 import React, { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { storeIsLoggedIn, storeLogin, storeLogout } from "../Auth/user";
+import { storeGetUserId, storeIsLoggedIn, storeLogin, storeLogout } from "../Auth/user";
 import { fetchUrl } from "../Lib/axios";
-
+import {meUrl} from "../Lib/config";
 export const authContext = createContext();
 
 export const AuthContextProvider = (props) => {
@@ -10,9 +10,13 @@ export const AuthContextProvider = (props) => {
   const [user, setUser] = useState({});
   const navigate = useNavigate();
   useEffect(() => {
+    console.log("is user test", isUser)
     if (isUser) {
-      fetchUrl("/users/me")
+      const id = storeGetUserId();
+      console.log("meUrl+id",meUrl+id);
+      fetchUrl(meUrl)
         .then((u) => {
+    console.log("user data",u);
           setUser(u);
         })
         .catch(setUser({}));
@@ -21,7 +25,7 @@ export const AuthContextProvider = (props) => {
 
   const refreshUser = () => {
     if (isUser) {
-      fetchUrl("/users/me")
+      fetchUrl(meUrl(user._id))
         .then((u) => {
           setUser(u);
         })
@@ -32,7 +36,8 @@ export const AuthContextProvider = (props) => {
   const login = (token) => {
     storeLogin(token);
     setIsUser(storeIsLoggedIn());
-    navigate("/mypets");
+    console.log("user update",storeIsLoggedIn(),isUser)
+    navigate("/cart");
   };
 
   const logout = () => {
@@ -42,7 +47,7 @@ export const AuthContextProvider = (props) => {
   };
 
   const updateUser = () => {
-    fetchUrl("/users/me")
+    fetchUrl(meUrl)
       .then((u) => {
         setUser(u);
       })
@@ -56,6 +61,7 @@ export const AuthContextProvider = (props) => {
     user,
     updateUser,
     refreshUser,
+    setUser
   };
 
   return (

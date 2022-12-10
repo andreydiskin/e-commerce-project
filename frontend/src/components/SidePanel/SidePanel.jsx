@@ -35,31 +35,24 @@ export default function SidePanel(props) {
         to="/cart"
         iconCompoment={<ShoppingCartIcon />}
       />
-      <Divider />
       <SidePanelItem
         secured={true}
         role="user"
         linkName="Wishlist"
-        to="/wishlist/:id"
+        to="/wishlist"
         iconCompoment={<ReceiptLongIcon />}
       />
 
-<SidePanelItem
-        secured={true}
-        role="user"
-        linkName="Purchased"
-        to="/purchased/:id"
-        iconCompoment={<ShoppingBasketIcon />}
-      />
+
+<Divider />
 
       <SidePanelItem
         secured={true}
         role="admin"
         linkName="Add Item"
-        to="/admin/addItem"
+        to="/admin/additem"
         iconCompoment={<AddIcon />}
       />
-
 <SidePanelItem
         secured={true}
         role="admin"

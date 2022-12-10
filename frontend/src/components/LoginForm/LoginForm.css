@@ -20,7 +20,3 @@
   display: flex;
   justify-content: flex-end;
 }
-
-.MuiTypography-root.forgotPassword {
-  cursor: pointer;
-}

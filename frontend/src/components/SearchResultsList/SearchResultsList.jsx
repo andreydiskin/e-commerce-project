@@ -1,5 +1,6 @@
 import React from "react";
 import "./SearchResultsList.css";
+import PetCard from "../ItemCard/ItemCard";
 import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/system";
 import { Typography } from "@mui/material";
@@ -20,13 +21,13 @@ export default function SearchResultsList(props) {
     return (
       <Box>
         <Typography className="noResHeader" variant="h5">
-          No Items Found!
+          No results found.. :(
         </Typography>
       </Box>
     );
   }
 
-  /*return (
+  return (
     <>
       {props.data.map((pet) => {
         return (
@@ -39,5 +40,5 @@ export default function SearchResultsList(props) {
         );
       })}
     </>
-  );*/
+  );
 }

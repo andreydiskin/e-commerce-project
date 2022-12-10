@@ -1,6 +1,6 @@
 import axios from "axios";
 import { storeGetToken } from "../Auth/user";
-import { meUrl } from "./config";
+
 
 
 
@@ -8,16 +8,16 @@ export const fetchUrl = (url) => {
   return new Promise((res, rej) => {
     const config = {
       headers: {
-        authorization: storeGetToken(),
+        token: storeGetToken(),
       },
    
     };
-
+console.log("url",url)
     axios
-      .get(meUrl, config)
+      .get(url, config)
       .then((resp) => {
         console.log("resp",resp);
-        res(resp.data.data);
+        res(resp.data);
       })
       .catch((resp) => {
         console.log("resp",resp);

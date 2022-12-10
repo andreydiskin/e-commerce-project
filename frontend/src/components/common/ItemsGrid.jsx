@@ -1,16 +1,17 @@
 import { Grid, Typography } from "@mui/material";
 import React from "react";
 import ItemCard from "../ItemCard/ItemCard";
+import PetCard from "../ItemCard/ItemCard";
 
-export default function OwnerPetsGrid(props) {
+export default function ItemsGrid(props) {
   console.log(props)
   return (
     <Grid
-      className="myPetsGrid"
+      className="myItemsGrid"
       container
       spacing={2}
       columnSpacing={{ xs: 3 }}
-      columns={{ xs: 12, sm: 6, md: 6 }}
+      columns={{ xs: 12, sm: 6, md: 3 }}
     >
       {props.userDogs?.length ? (
         props.userDogs.map((pet) => (
@@ -24,6 +25,8 @@ export default function OwnerPetsGrid(props) {
             <ItemCard
               redirectCallback={props.redirectCallback}
               showStatus={props.showStatus}
+              amountEditable={props.amountEditable}
+              removeCallback={props.removeCallback}
               key={pet.id}
               data={pet}
             />

@@ -26,48 +26,35 @@ const validationSchema = yup.object({
     .string("please re write your password")
     .oneOf([yup.ref("password")], "didnt match your password")
     .required("Repeat your password"),
-  firstName: yup
-    .string("Enter your first name.")
-    .required("First Name is required!"),
-  lastName: yup
-    .string("Enter your last name.")
-    .required("Last Name is required!"),
-  phoneNumber: yup
-    .string("Enter your phone number")
-    .required("Phone number is required"),
+  username: yup.string("Enter your username").required("Username is required"),
+
 });
 
 // use my form object type for signup form
 
 const inputs = [
     { ref: "email", label: "Email", type: "email" },
+    { ref: "username", label: "Username", type: "text" },
     { ref: "password", label: "Password", type: "password" },
     { ref: "repeatPassword", label: "Repeat Password", type: "password" },
-    { ref: "firstName", label: "First Name", type: "text" },
-    { ref: "lastName", label: "Last Name", type: "text" },
-    { ref: "phoneNumber", label: "Phone Number", type: "text" },
-    // shipping address
-    { ref: "shippingAddress", label: "Shipping Address", type: "text" },
-    // payment method select
     {
       ref: "paymentMethod",
       label: "Payment Method",
       type: "select",
       options: [
-        { optionName: "cash", value: "Cash" },
-        { optionName: "credit", value: "Credit" },
+        { optionName: "Cash", value: "cash" },
+        { optionName: "Credit", value: "credit" },
       ],
     },
     // secret question select
     {
-      ref:
-        "secret question",
+      ref:"secretQuestion",
       label: "Secret Question",
       type: "select",
       options: [
-        { optionName: "petName", value: "What is your pet name?" },
-        { optionName: "birthPlace", value: "Where were you born?" },
-        { optionName: "favoriteFood", value: "What is your favorite food?" },
+        { optionName: "What is your pet name?", value: "petName" },
+        { optionName:"Where were you born?", value:  "birthPlace" },
+        { optionName:"What is your favorite food?", value: "favoriteFood"  },
       ],
     }
       ,
@@ -79,15 +66,12 @@ const inputs = [
 ];
 
 const deafultConfig = {
+  username: "",
   email: "",
   password: "",
+  paymentMethod: "cash",
   repeatPassword: "",
-  firstName: "",
-  lastName: "",
-  phoneNumber: "",
-  shippingAddress: "",
-  paymentMethod: "",
-  secretQuestion: "",
+  secretQuestion: "petName",
   secretAnswer: "",
 };
 export default function SignUpForm(props) {
@@ -110,6 +94,7 @@ export default function SignUpForm(props) {
         inputs={inputs}
         submitMsg={"Sign Up"}
         deafultConfig={deafultConfig}
+        setIsLoginModalOpen={props.setIsLoginModalOpen}
         callback={onSubmit}
       />
          </Box>

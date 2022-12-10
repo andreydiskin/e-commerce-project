@@ -2,10 +2,11 @@ import { Stack, Typography } from "@mui/material";
 import React, { useState } from "react";
 import SearchForm from "../../components/searchForm/SearchForm";
 import SearchResultsList from "../../components/SearchResultsList/SearchResultsList";
+import { mockItems } from "../../Lib/data";
 import "./SearchPage.css";
 
 export default function SearchPage() {
-  const [searchedItems, setSearchedItems] = useState([]);
+  const [searchedItems, setSearchedItems] = useState(mockItems);
   const [isLoading, setIsLoading] = useState(false);
 
   return (
@@ -14,7 +15,7 @@ export default function SearchPage() {
       <SearchForm
         isLoading={isLoading}
         setIsLoading={setIsLoading}
-        setSearchPets={setSearchedItems}
+        setSearchedItems={setSearchedItems}
       />
       <SearchResultsList isLoading={isLoading} data={searchedItems} />
     </Stack>

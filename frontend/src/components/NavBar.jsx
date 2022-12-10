@@ -38,7 +38,7 @@ export default function NavBar(props) {
         <Typography variant="h8" component="div" sx={{ flexGrow: 1 }}>
           {isUser && (
             <>
-              Welcome {user.firstName} {user.lastName}
+              Welcome {user.username} 
             </>
           )}
         </Typography>

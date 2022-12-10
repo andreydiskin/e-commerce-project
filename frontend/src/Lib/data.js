@@ -30,3 +30,36 @@ export const mockItems = [{
     pic: 'https://www.91-img.com/gallery_images_uploads/3/d/3df5ca6a9b470f715b085991144a5b76e70da975.JPG?tr=h-550,w-0,c-at_max',
 },
     ]
+
+    export const mocksuggestedItems = [
+        {
+            id:1,
+            name:'cooking pot',
+            description: 'cooking pot',
+            type: 'taxable',
+            category: 'electronics',
+            price: 100,
+            amount: 1,  
+            pic: 'https://www.91-img.com/gallery_images_uploads/3/d/3df5ca6a9b470f715b085991144a5b76e70da975.JPG?tr=h-550,w-0,c-at_max',
+        },
+        {
+            id:2,
+            name:'cooking oven',
+            description: 'cooking oven',
+            type: 'taxable',
+            category: 'electronics',
+            price: 200,
+            amount: 1,
+            pic: 'https://www.91-img.com/gallery_images_uploads/3/d/3df5ca6a9b470f715b085991144a5b76e70da975.JPG?tr=h-550,w-0,c-at_max',
+        },
+        {
+            id:3,
+            name:'cooking stove',
+            description: 'cooking stove',
+            type: 'taxable',
+            category: 'electronics',
+            price: 300,
+            amount: 1,
+            pic: 'https://www.91-img.com/gallery_images_uploads/3/d/3df5ca6a9b470f715b085991144a5b76e70da975.JPG?tr=h-550,w-0,c-at_max',
+        },
+     ]

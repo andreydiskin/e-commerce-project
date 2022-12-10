@@ -2,9 +2,15 @@ import React, { useContext } from "react";
 import Typography from "@mui/material/Typography";
 import { CurrencyContext } from "../../context/currencyContext";
 
-export default function ItemDesc(props) {
-  const {currPrice}= useContext(CurrencyContext);
-
+export default function PetDesc(props) {
+  const {currPrice}= useContext(CurrencyContext) 
+  console.log(props)
+  //   id
+// name
+// description
+// type
+// category
+// price
   return (
     <>
   

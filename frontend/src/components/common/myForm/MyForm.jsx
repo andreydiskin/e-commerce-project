@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import "./myForm.css";
@@ -12,10 +12,16 @@ export default function MyForm(props) {
     initialValues: props.deafultConfig,
     validationSchema: props.validationSchema,
     onSubmit: (values) => {
+      console.log(values)
       props.callback(values);
     },
   });
 
+
+  useEffect(() => {
+   console.log("errors",formik.errors)
+  }, [formik.errors])
+  
   return (
     <Box>
       <form onSubmit={formik.handleSubmit} className="myFormCon">

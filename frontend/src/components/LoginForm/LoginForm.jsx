@@ -1,7 +1,10 @@
 import React, { useContext, useState } from "react";
+import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import "./LoginForm.css";
-import { Typography } from "@mui/material";
+import { Alert, Typography } from "@mui/material";
+import Button from "@mui/material/Button";
+import { useFormik } from "formik";
 import { loginApiCall } from "../../services/apicalls";
 import { authContext } from "../../context/authContext";
 import { toastContext } from "../../context/toastContext";
@@ -10,20 +13,19 @@ import ForgotPasswordForm from "./ForgotPasswordForm";
 import MyForm from "../common/myForm/MyForm";
 
 const validationSchema = yup.object({
-  email: yup
+  userName: yup
     .string("Enter your email")
-    .email("Enter a valid email")
     .required("Email is required"),
   password: yup.string("Enter your password").required("Password is required"),
 });
 
 const inputs = [
-  { ref: "email", label: "Email", type: "email" },
+  { ref: "userName", label: "UserName", type: "text" },
   { ref: "password", label: "Password", type: "password" },
 ];
 
 const deafultConfig = {
-  email: "",
+  userName: "",
   password: "",
 };
 
@@ -44,7 +46,7 @@ const onSubmit = async (values) => {
 };
 
   if(isForgotPassword)  return(
-    <ForgotPasswordForm setIsForgotPassword={setIsForgotPassword}/>)
+    <ForgotPasswordForm setIsLoginModalOpen={props.setIsLoginModalOpen} setIsForgotPassword={setIsForgotPassword}/>)
    ;
 
   return (
@@ -56,10 +58,12 @@ const onSubmit = async (values) => {
         inputs={inputs}
         submitMsg={"Login"}
         deafultConfig={deafultConfig}
+        setIsLoginModalOpen={props.setIsLoginModalOpen}
         callback={onSubmit}
       />
-        <Typography onClick={()=>setIsForgotPassword(true)} variant="caption" display="block" gutterBottom className="forgotPassword">
-        Forgot your Password?
+        <Typography onClick={()=>setIsForgotPassword(true)} variant="caption" display="block" gutterBottom>
+
+        forgat Password?
       </Typography>
      
     </Box>

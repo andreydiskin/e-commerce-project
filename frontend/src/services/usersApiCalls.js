@@ -1,6 +1,9 @@
 import axios from "axios";
 import { storeGetToken } from "../Auth/user";
 import {
+  getAllUsersUrl,
+  getFullUsersDataUrl,
+  getUserPetsAllUrl,
   signUpUrl,
   updateUserUrl,
 } from "../Lib/config";
@@ -34,3 +37,52 @@ export const updateProfileService = async (id, callback, data) => {
   }
 };
 
+export const getAllUsersService = async (callback) => {
+  try {
+    const config = {
+      headers: {
+        authorization: storeGetToken(),
+      },
+     
+    };
+    const resp = await axios.get(getAllUsersUrl, config);
+    const data = resp.data.data;
+    callback(data);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getFullUserDataService = async (id, callback) => {
+  try {
+    const config = {
+      headers: {
+        authorization: storeGetToken(),
+      },
+     
+    };
+    const resp = await axios.get(getFullUsersDataUrl(id), config);
+    const data = resp.data.data;
+    callback(data);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getUserPetsAll = async (userId, callback) => {
+  try {
+    const config = {
+      headers: {
+        authorization: storeGetToken(),
+      },
+     
+    };
+
+    const resp = await axios.get(getUserPetsAllUrl(userId), config);
+    const petData = resp.data.data;
+
+    callback(petData);
+  } catch (error) {
+    throw error;
+  }
+};

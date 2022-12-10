@@ -11,6 +11,7 @@ import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import "./SearchForm.css";
 import * as yup from "yup";
+import { getPetsByQueryService } from "../../services/petsApiCalls";
 import { toastContext } from "../../context/toastContext";
 import { CurrencyContext } from "../../context/currencyContext";
 
@@ -44,7 +45,7 @@ export default function SearchForm(props) {
 
       try {
         props.setIsLoading(true);
-        //await getPetsByQueryService(query, props.setSearchPets);
+        await getPetsByQueryService(query, props.setSearchedItems);
         props.setIsLoading(false);
       } catch (err) {
         openToast(err.message, "error");
@@ -66,9 +67,40 @@ export default function SearchForm(props) {
   return (
     <Box>
       <form onSubmit={formik.handleSubmit} className="formCon">
+
         <Box>
        
-           
+           {/* sort mechnizem */}
+          <FormControl variant="standard" fullWidth>
+            <InputLabel>Sort By</InputLabel>
+            <Select
+
+              label="Sort By"
+              onChange={(e) => 
+                props.setSearchedItems((per)=>{
+                  const sortedPets = [...per];
+                  if(e.target.value === "Price"){
+                    sortedPets.sort((a,b)=>a.price-b.price)
+                  }else{
+                    sortedPets.sort((a,b)=>a.name.localeCompare(b.name))
+                  }
+                  console.log("test",sortedPets)
+                  return [...sortedPets]
+                })
+              }
+              defaultValue="Price"
+              name="sortBy"
+              multiple={false}
+            >
+              {["Price", "Name"].map((item) => (
+                <MenuItem key={item} value={item}>
+                  {item}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+       
+
               <TextField
               onChange={formik.handleChange}
               error={formik.touched.name && Boolean(formik.errors.name)}

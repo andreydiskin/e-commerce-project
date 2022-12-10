@@ -36,13 +36,15 @@ export default function ForgotPasswordForm(props) {
     <Box className="LoginformCon ">
     <MyForm 
     validationSchema={validationSchema}
-    header={"Forgot Password"}
+    header={"forgot password"}
     inputs={inputs}
     submitMsg={"Submit"}
     deafultConfig={deafultConfig}
+    setIsLoginModalOpen={props.setIsLoginModalOpen}
     callback={onSubmit}
     />
-    <Typography onClick={()=>props.setIsForgotPassword(false)} variant="caption" display="block" gutterBottom className="forgotPassword"> 
+    <Typography onClick={()=>props.setIsForgotPassword(false)} variant="caption" display="block" gutterBottom>
+       
         Back to Login
 </Typography>
     </Box>

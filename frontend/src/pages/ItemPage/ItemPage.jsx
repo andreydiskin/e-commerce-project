@@ -4,12 +4,22 @@ import { useParams } from "react-router-dom";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 import { CardMedia } from "@mui/material";
-import ItemDesc from "../../components/common/ItemDesc";
+import PetDesc from "../../components/common/PetDesc";
+import IsPetAdoptedByUser from "../../components/common/IsPetAdoptedByUser";
+import { imagesBaseUrl } from "../../Lib/config";
 import { useContext } from "react";
 import { mockItems } from "../../Lib/data";
 import { authContext } from "../../context/authContext";
 
+import {
+  adoptPetService,
+  getPetByIdService,
+  returnPetService,
+  savePetService,
+} from "../../services/petsApiCalls";
+import Loader from "../../components/common/Loader/Loader";
 import { toastContext } from "../../context/toastContext";
 
 export default function ItemPage() {
@@ -30,7 +40,7 @@ export default function ItemPage() {
     // getPet();
   }, [id]);
 
- /* useEffect(() => {
+  useEffect(() => {
     setIsSaved(user?.savedPets?.includes(id));
   }, [user]);
 
@@ -52,9 +62,9 @@ export default function ItemPage() {
     } catch (error) {
       openToast(error.message, "error");
     }
-  };*/
+  };
 
-  /*const returnPet = () => {
+  const returnPet = () => {
     try {
       returnPetService(id, setItem);
       openToast("Pet returned", "success");
@@ -73,7 +83,7 @@ export default function ItemPage() {
   };
   if (!item) {
     return <Loader />;
-  }*/
+  }
 
 
   return (
@@ -87,7 +97,7 @@ export default function ItemPage() {
         />
        
         <CardContent className="cardContent">
-          <ItemDesc item={item} />
+          <PetDesc item={item} />
          
          </CardContent>
         {isUser && (
@@ -97,7 +107,7 @@ export default function ItemPage() {
               variant="contained"
               color="secondary"
               size="small"
-              //onClick={isSaved ? unsavePet : savePet}
+              onClick={isSaved ? unsavePet : savePet}
             >
               {isSaved ? "Add to wishlist " : "remove from wishlist"}
             </Button>
@@ -109,9 +119,9 @@ export default function ItemPage() {
               variant="contained"
               color="secondary"
               size="small"
-              //onClick={isSaved ? unsavePet : savePet}
+              onClick={ savePet}
             >
-              {isSaved ? "Add to cart " : "remove from cart"}
+              { "Add to cart "}
             </Button>
 
         
