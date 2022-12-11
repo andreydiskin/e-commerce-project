@@ -1,4 +1,5 @@
 const Order = require("../models/Order");
+const Cart = require("../models/Cart");
 const {
   verifyToken,
   verifyTokenAndAuthorization,
@@ -14,6 +15,7 @@ router.post("/", verifyToken, async (req, res) => {
 
   try {
     const savedOrder = await newOrder.save();
+    Cart.findByIdAndDelete(req.body.cartId);
     res.status(200).json(savedOrder);
   } catch (err) {
     res.status(500).json(err);
