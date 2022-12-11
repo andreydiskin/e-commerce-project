@@ -31,15 +31,30 @@ export const CurrencyContextProvider = (props) => {
             return `₪${price}`;
         }
     }
+// not for view, only for  server
+    const reverseCurrPrice = (price) => {
+        console.log("currency",currency)
+        if (currency === nis) {
+            return price;
+        } 
+          
+         else if (currency === usd) {
+            return calcFromUSDToNis(price);
+        }
+    }
 
     const returnCurrencyIcon = currency === nis ? '₪' : '$';
 
     const calcFromNisToUsd = (nis) => {
         return (nis / 3.3).toFixed(2);
     };
+
+    const calcFromUSDToNis = (nis) => {
+        return (nis * 3.3).toFixed(2);
+    };
     
     return (
-        <CurrencyContext.Provider value={{ currency, setCurrency,currPrice,returnCurrencyIcon }}>
+        <CurrencyContext.Provider value={{ currency, reverseCurrPrice,setCurrency,currPrice,returnCurrencyIcon }}>
         {props.children}
         </CurrencyContext.Provider>
     );

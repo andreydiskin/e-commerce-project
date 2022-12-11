@@ -7,7 +7,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
-import { imagesBaseUrl } from "../../Lib/config";
+import { imagesBaseUrl, imgsBucketUrl } from "../../Lib/config";
 import { adoptPetService } from "../../services/petsApiCalls";
 import { authContext } from "../../context/authContext";
 import { toastContext } from "../../context/toastContext";
@@ -42,13 +42,13 @@ export default function ItemCard(props) {
         component="img"
         height="180"
         className="imageCon"
-        src= {props.data.pic}
+        image= {imgsBucketUrl+props.data.img}
         alt="pet image"
       />
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
-          {props.data.name}
+          {props.data.title}
         </Typography>
         {props.showStatus && (
           <Typography gutterBottom variant="h7" component="div">
@@ -84,14 +84,14 @@ export default function ItemCard(props) {
                 </Button>
               
 }
-          
+        
               <Button
-                onClick={()=>props.removeCallback(props.data.id)}
+                onClick={()=>props.itemPositionChangeCallback(props.data.id)}
                 className="adpBtn"
                 variant="outlined"
                 size="small"
               >
-                Remove
+                {     props.isAddable ? "Add to cart" : "Remove"}
               </Button>
             
           </>

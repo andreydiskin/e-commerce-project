@@ -26,7 +26,7 @@ export default function ItemsGrid(props) {
               redirectCallback={props.redirectCallback}
               showStatus={props.showStatus}
               amountEditable={props.amountEditable}
-              removeCallback={props.removeCallback}
+              itemPositionChangeCallback={props.removeCallback}
               key={pet.id}
               data={pet}
             />

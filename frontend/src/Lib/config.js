@@ -1,26 +1,31 @@
 export const urlBase = "http://localhost:3002";
 
+export const imgsBucketUrl="https://items-app.s3.eu-west-2.amazonaws.com/";
+
 export const productsUrl = "/api/products/";
 
 export const usersUrl = "/api/users/";
 
+export const newestItemsUrl = urlBase + productsUrl + "showcaseproducts";
+
 export const meUrl =urlBase+usersUrl+"me/" ;
-export const authUrl="/api/auth/";
 
 export const nis = "NIS";
 export const usd = "USD";
 
 export const addItemUrl = urlBase + productsUrl;
 
-export const loginUrl = urlBase +authUrl+ "login";
-export const signUpUrl = urlBase +authUrl+"register";
+export const loginUrl = urlBase+ "/api/login";
+export const signUpUrl = urlBase +"/api/signup";
+
+export const cartUrl = urlBase + "/api/carts/";
 
 
 export const getPetUrl = (id) => urlBase + productsUrl + id;
 
 export const getAllUsersUrl = urlBase + usersUrl;
 export const getFullUsersDataUrl = (id) => urlBase + usersUrl + id + "/full";
-export const getPeByQueryUrl = (query) => urlBase + productsUrl + "?" + query;
+export const getItemsByQuery = (query) => urlBase + productsUrl + "query/?" + query;
 export const getUserPetsAllUrl = (id) => urlBase + productsUrl + "/user/" + id;
 
 export const updatePetUrl = (id) => urlBase + productsUrl + id;

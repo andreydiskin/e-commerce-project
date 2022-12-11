@@ -36,19 +36,19 @@ const {currPrice}  = useContext(CurrencyContext);
 
 
   useEffect(() => {
-    // const getPets = async () => {
-    //   try {
-    //     setIsLoading(true);
-    //     await getUserPetsAll(user._id, (data) => {
-    //       setItems(data);
-    //       setIsLoading(false);
-    //     });
-    //   } catch (error) {
-    //     openToast(error.message, "error");
-    //     setIsLoading(false);
-    //   }
-    // };
-    // getPets();
+    const getPets = async () => {
+      try {
+        setIsLoading(true);
+        await getUserPetsAll(user._id, (data) => {
+          setItems(data);
+          setIsLoading(false);
+        });
+      } catch (error) {
+        openToast(error.message, "error");
+        setIsLoading(false);
+      }
+    };
+    getPets();
   }, [user]);
 
   const goToPetPage = (id) => {
@@ -78,7 +78,7 @@ const {currPrice}  = useContext(CurrencyContext);
           showStatus={true}
           redirectCallback={goToPetPage}
           amountEditable={props.amountEditable}
-          removeCallback ={removeItem}
+          itemPositionChangeCallback ={removeItem}
           //arrays of saved or owned pets
           userDogs={mockItems}
           noDataMsg={

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext,useEffect, useState } from "react";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import "./HomePage.css";
@@ -12,9 +12,34 @@ import {
   CardMedia,
 } from "@mui/material";
 import { CurrencyContext } from "../../context/currencyContext";
+import { getNewestItemService } from "../../services/petsApiCalls";
+import { imgsBucketUrl, newestItemsUrl } from "../../Lib/config";
+import { toastContext } from "../../context/toastContext";
 
 export default function HomePage() {
   const { currPrice } = useContext(CurrencyContext);
+  const {openToast}=useContext(toastContext);
+  const [newestItems,setNewestItems]=useState({});
+  const [isLoading,setIsLoading]=useState(false);
+
+  useEffect(() => {
+    const getFeaturedItems=async()=>{
+      try{
+        setIsLoading(true);
+        await getNewestItemService(newestItemsUrl,setNewestItems);
+        console.log("take 1",newestItems);
+
+        setIsLoading(false);
+
+      }catch(err){
+        openToast(err.message, "error");
+        setIsLoading(false);
+      }
+      
+    }
+    getFeaturedItems();
+    
+  },[]);
   return (
     <>
       <Stack className="homePageCon" spacing={2}>
@@ -43,30 +68,35 @@ export default function HomePage() {
           So go ahead and buy your favorite products today!
         </Typography>{" "}
       </Stack>
-
-      {["cooking", "gaming", "toys"].map((category) => (
-        <Box className="itemsShowCaseCon" key={category}>
-          {category}
+     
+      {Object.entries(  newestItems).map(([title,items],i) => (
+      items.length && 
+        <Box className="itemsShowCaseCon" key={items[0]._id}>
+          <h7 className="showCaseCategory">
+          {title}
+          </h7>
+  
           <Box
             className="suggestedCardCon"
-            key={category}
+            key={items[0]._id}
             sx={{ display: "flex" }}
           >
-            {mocksuggestedItems.map((item) => (
-              <Card className="itemShowCase" key={item.id}>
+      
+            {items.map((item) => (
+              <Card className="itemShowCase" key={item._id}>
                 <CardMedia
                   component="img"
                   height="140"
-                  src={item.pic}
+                  image={imgsBucketUrl+item.img}
                   alt="green iguana"
-                  key={item.id + "pic"}
+                  key={item._id + "pic"}
                 />
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
-                    {item.name}
+                    {item.title}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {item.description}
+                    {item.desc}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     {currPrice(item.price)}

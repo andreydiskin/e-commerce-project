@@ -35,7 +35,7 @@ width: 100%;
 
 .MuiBox-root.suggestedCardCon{
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
   width: 70%;
   margin: auto;
@@ -51,4 +51,11 @@ width: 100%;
   width: 30%;
   height: 100%;
  
+}
+
+.showCaseCategory{
+  font-family: "Playfair Display", serif;
+  font-size: 22px;
+  color: #f35876;
+  margin-bottom: 10px;
 }

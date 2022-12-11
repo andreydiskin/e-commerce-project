@@ -39,9 +39,9 @@ export default function AddItemForm() {
 
     {
       options: [
-        { optionName: "toys", value: "Toys" },
-        { optionName: "electronics", value: "Electronics" },
-        { optionName: "food", value: "Food" },
+        { optionName: "toys", value: "toys" },
+        { optionName: "electronics", value: "electronics" },
+        { optionName: "food", value: "food" },
         ,
       ],
       type: "select",

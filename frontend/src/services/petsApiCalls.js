@@ -4,6 +4,7 @@ import {
   addItemUrl,
   addPetUrl,
   adoptPetUrl,
+  getItemsByQuery,
   getPeByQueryUrl,
   getPetUrl,
   returnPetUrl,
@@ -102,18 +103,18 @@ export const updatePetById = async (id, reqData, callback) => {
   }
 };
 
-export const getPetsByQueryService = async (query, callback) => {
+export const getItemsByQueryService = async (query, callback) => {
   try {
     const config = {
       headers: {
-        authorization: storeGetToken(),
+        token: storeGetToken(),
       },
     
     };
 
-    const resp = await axios.get(getPeByQueryUrl(query), config);
-    const petData = resp.data.data;
-    callback(petData);
+    const resp = await axios.get(getItemsByQuery(query), config);
+    const items = resp.data;
+    callback(items);
   } catch (error) {
     throw error;
   }
@@ -134,3 +135,38 @@ export const getPetByIdService = async (id, callback) => {
     throw error;
   }
 };
+
+// get items with newst query
+export const getNewestItemService = async (url, callback) => {
+  try {
+    const config = {
+      headers: {
+        token: storeGetToken(),
+      },
+    
+    };
+    const resp = await axios.get(url, config);
+    const items = resp.data;
+    callback(items);
+  } catch (error) {
+    throw error;
+  }
+}
+
+// cartUrl = /api/cart post requests
+export const getCartService = async (url,productId,userId, callback) => {
+  try {
+    const config = {
+      headers: {
+        token: storeGetToken(),
+      },
+    
+    };
+    
+    const resp = await axios.post(url, config);
+    const items = resp.data;
+    callback(items);
+  } catch (error) {
+    throw error;
+  }
+}

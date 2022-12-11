@@ -6,7 +6,7 @@ import { mockItems } from "../../Lib/data";
 import "./SearchPage.css";
 
 export default function SearchPage() {
-  const [searchedItems, setSearchedItems] = useState(mockItems);
+  const [searchedItems, setSearchedItems] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   return (
@@ -16,8 +16,9 @@ export default function SearchPage() {
         isLoading={isLoading}
         setIsLoading={setIsLoading}
         setSearchedItems={setSearchedItems}
+       
       />
-      <SearchResultsList isLoading={isLoading} data={searchedItems} />
+      <SearchResultsList   isLoading={isLoading} data={searchedItems} />
     </Stack>
   );
 }
