@@ -10,7 +10,7 @@ const UserSchema = new mongoose.Schema(
     secretAnswer: { type: String, required: true },
     secretQuestion: { type: String, required: true },
     address: { type: String, required: true },
-    paymentMethod: { type: String },
+    paymentMethod: { type: String, required: true },
     isAdmin: {
       type: Boolean,
       default: false,
