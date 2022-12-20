@@ -5,7 +5,6 @@ import { authContext } from "../context/authContext";
 
 export const SecureRoute = ({ children, role }) => {
   const { isUser, user } = useContext(authContext);
-  console.log(user);
   if (!isUser) {
     return <Navigate to="/" />;
   }
@@ -13,18 +12,15 @@ export const SecureRoute = ({ children, role }) => {
     return <Loader />;
   }
 
-
-  if(role==="admin"){
-    if(!user.isAdmin){
+  if (role === "admin") {
+    if (!user.isAdmin) {
       return <Navigate to="/" />;
-    }else{
+    } else {
       return children;
     }
-  }else{
+  } else {
     return children;
   }
-
-
 };
 
 export const Securelink = ({ children, to, role, className = "" }) => {
@@ -33,11 +29,9 @@ export const Securelink = ({ children, to, role, className = "" }) => {
   if (!isUser) {
     return <></>;
   }
-  if(role==="admin"  && !user.isAdmin){
-      return <></>;
-    
+  if (role === "admin" && !user.isAdmin) {
+    return <></>;
   }
-
 
   return (
     <Link className={className} to={to}>

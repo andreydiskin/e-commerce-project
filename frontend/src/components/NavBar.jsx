@@ -36,11 +36,7 @@ export default function NavBar(props) {
         </IconButton>
 
         <Typography variant="h8" component="div" sx={{ flexGrow: 1 }}>
-          {isUser && (
-            <>
-              Welcome {user.username} 
-            </>
-          )}
+          {isUser && <>Welcome {user.username}</>}
         </Typography>
         {isUser ? (
           <Button onClick={() => logout()} color="inherit">

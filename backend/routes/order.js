@@ -9,7 +9,6 @@ const {
 const router = require("express").Router();
 
 //CREATE
-
 router.post("/", verifyToken, async (req, res) => {
   const newOrder = new Order(req.body);
 
@@ -19,6 +18,31 @@ router.post("/", verifyToken, async (req, res) => {
     res.status(200).json(savedOrder);
   } catch (err) {
     res.status(500).json(err);
+  }
+});
+
+router.post("/neworder", verifyToken, async (req, res) => {
+  // find user cart with isCart true
+  const cart = await Cart.findOne({
+    userId: req.body.userId,
+    isCart: true,
+  });
+
+  // create new order with cart data
+  const newOrder = new Order({
+    userId: req.body.userId,
+    products: cart.products,
+    cartId: cart._id,
+    address: req.body.address,
+    amount: req.body.amount,
+  });
+
+  try {
+    const savedOrder = await newOrder.save();
+    await Cart.findByIdAndDelete(cart._id);
+    return res.status(200).json(savedOrder);
+  } catch (err) {
+    return res.status(500).json(err);
   }
 });
 
@@ -43,6 +67,16 @@ router.delete("/:id", verifyTokenAndAdmin, async (req, res) => {
   try {
     await Order.findByIdAndDelete(req.params.id);
     res.status(200).json("Order has been deleted...");
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+router.get("/:orderid", verifyTokenAndAuthorization, async (req, res) => {
+  try {
+    const orderId = req.params.orderid;
+    const order = await Order.findById(orderId);
+    res.status(200).json(order);
   } catch (err) {
     res.status(500).json(err);
   }

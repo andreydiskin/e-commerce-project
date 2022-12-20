@@ -6,108 +6,119 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { useNavigate } from "react-router-dom";
-import { imagesBaseUrl } from "../../Lib/config";
-import { adoptPetService } from "../../services/petsApiCalls";
+import { imgsBucketUrl } from "../../Lib/config";
 import { authContext } from "../../context/authContext";
 import { toastContext } from "../../context/toastContext";
 import { CurrencyContext } from "../../context/currencyContext";
 import { TextField } from "@mui/material";
 import { Box } from "@mui/system";
+import { updateProductAmountInCartService } from "../../services/itemsApiCalls";
 
 export default function ItemCard(props) {
-  const { isUser } = useContext(authContext);
+  const { isUser, user } = useContext(authContext);
   const { openToast } = useContext(toastContext);
-  const {currPrice} = useContext(CurrencyContext);
+  const { currPrice } = useContext(CurrencyContext);
   const [editMode, setEditMode] = useState(false);
-  const [editedAmount, setEditedAmount] = useState(0);
-  const navigate = useNavigate();
-  const remove = async () => {
+  const [editedAmount, setEditedAmount] = useState(props.data.quantity);
+
+  const edit = async (currAmount) => {
+    setEditMode(!editMode);
+    if (!editMode) return;
     try {
-      await adoptPetService(props.data._id, true, (s) => console.log(s));
-      openToast("Pet adopted", "success");
-      navigate("/search/" + props.data._id);
-    } catch (error) {
-      openToast(error.message, "error");
+      await updateProductAmountInCartService(
+        user._id,
+        props.data._id,
+        editedAmount,
+        props.setItems
+      );
+      openToast("Amount updated successfully");
+    } catch (err) {
+      openToast(err.message);
     }
   };
 
-  const edit =async (currAmount) => {
-   setEditMode(!editMode);
-   setEditedAmount(currAmount);
-  };
   return (
-    <Card  sx={{ display: 'flex', justifyContent: 'space-around' }} elevation={10} className="petCard">
+    <Card
+      sx={{ display: "flex", justifyContent: "space-around" }}
+      elevation={10}
+      className="petCard"
+    >
       <CardMedia
         component="img"
         height="180"
         className="imageCon"
-        src= {props.data.pic}
-        alt="pet image"
+        image={imgsBucketUrl + props.data.img}
+        alt="item image"
       />
-        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          {props.data.name}
-        </Typography>
-        {props.showStatus && (
-          <Typography gutterBottom variant="h7" component="div">
-            {currPrice(props.data.price)}
+      <Box sx={{ display: "flex", flexDirection: "column" }}>
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="div">
+            {props.data.title}
           </Typography>
-        )}
+          {props.showStatus && (
+            <Typography gutterBottom variant="h6" component="div">
+              {currPrice(props.data.price)}
+            </Typography>
+          )}
           {props.showStatus && props.amountEditable && (
             <div className="amountCon">
-            <Typography gutterBottom variant="h7" component="div">
-              amount:
-            </Typography>
-            {
-            editMode ? <TextField  type="number" value={editedAmount} onChange={e=>setEditedAmount(e.target.value)} />
-            :
-          <Typography gutterBottom variant="h7" component="span">
-           {props.data.amount}
-          </Typography>
-          }
-          </div>
-        )}
-      </CardContent>
-      <CardActions>
-        {isUser && props.showStatus && (
-          <>
-       {props.amountEditable && 
+              <Typography gutterBottom variant="h6" component="div">
+                amount:
+              </Typography>
+              {editMode ? (
+                <TextField
+                  type="number"
+                  value={editedAmount}
+                  onChange={(e) => setEditedAmount(e.target.value)}
+                />
+              ) : (
+                <Typography gutterBottom variant="h6" component="span">
+                  {editedAmount}
+                </Typography>
+              )}
+            </div>
+          )}
+        </CardContent>
+        <CardActions>
+          {isUser && props.showStatus && (
+            <>
+              {props.amountEditable && (
                 <Button
-                  onClick={()=>edit(props.data.amount)}
+                  onClick={() => edit(props.data.quantity)}
                   className="adpBtn"
                   variant="outlined"
                   size="small"
                 >
-                 {editMode ? "Save" : "Edit"}
+                  {editMode ? "Save" : "Edit"}
                 </Button>
-              
-}
-          
+              )}
+
               <Button
-                onClick={()=>props.removeCallback(props.data.id)}
+                onClick={() =>
+                  props.itemPositionChangeCallback(
+                    props.isAddable ? editedAmount : props.data._id
+                  )
+                }
                 className="adpBtn"
                 variant="outlined"
                 size="small"
               >
-                Remove
+                {props.isAddable ? "Add to cart" : "Remove"}
               </Button>
-            
-          </>
-        )}
+            </>
+          )}
 
-        <Button
-          onClick={() => props.redirectCallback(props.data._id)}
-          className="linkSeeMoreBtn"
-          variant="text"
-          size="small"
-        >
-          See more
-        </Button>
+          <Button
+            onClick={() => props.redirectCallback(props.data._id)}
+            className="linkSeeMoreBtn"
+            variant="text"
+            size="small"
+          >
+            See more
+          </Button>
 
-        {props.anotherButton}
-      </CardActions>
+          {props.anotherButton}
+        </CardActions>
       </Box>
     </Card>
   );

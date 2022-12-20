@@ -16,7 +16,7 @@ export default function PageNotFound() {
       </Typography>
       <Typography
         className="sub-header"
-        variant="h7"
+        variant="h6"
         component="div"
         sx={{ flexGrow: 1 }}
       >

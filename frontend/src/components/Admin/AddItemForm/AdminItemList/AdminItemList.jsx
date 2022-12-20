@@ -2,31 +2,30 @@ import { Button, Grid, Typography } from "@mui/material";
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { toastContext } from "../../../../context/toastContext";
-import { editItemBaseUrl, editPetBaseUrl, seeMorePetBaseUrl } from "../../../../Lib/config";
-import { getPetsByQueryService } from "../../../../services/petsApiCalls";
+import { editItemBaseUrl, seeMoreItemBaseUrl } from "../../../../Lib/config";
+import { getItemsByQueryService } from "../../../../services/itemsApiCalls";
 import Loader from "../../../common/Loader/Loader";
 import ItemCard from "../../../ItemCard/ItemCard";
-import { mockItems } from "../../../../Lib/data";
-import "./AdminItemList.css"
+import "./AdminItemList.css";
 export default function AdminItemList() {
-  const [items, setItems] = useState(mockItems);
+  const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const { openToast } = useContext(toastContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // const getPets = async () => {
-    //   try {
-    //     setIsLoading(true);
-    //     await getPetsByQueryService("", setPets);
-    //     setIsLoading(false);
-    //   } catch (error) {
-    //     setIsLoading(false);
-    //     openToast(error.message, "error");
-    //   }
-    // };
-    // getPets();
+    const getProducts = async () => {
+      try {
+        setIsLoading(true);
+        await getItemsByQueryService("", setItems);
+        setIsLoading(false);
+      } catch (error) {
+        setIsLoading(false);
+        openToast(error.message, "error");
+      }
+    };
+    getProducts();
   }, []);
 
   if (isLoading) {
@@ -41,15 +40,22 @@ export default function AdminItemList() {
     >
       {items.length ? (
         items.map((item) => (
-          <Grid item className="gridItemAdmin" xs={12} sm={6} md={3} lg={2} key={item.id}>
+          <Grid
+            item
+            className="gridItemAdmin"
+            xs={12}
+            sm={6}
+            md={3}
+            lg={2}
+            key={item._id}
+          >
             <ItemCard
-              
-              redirectCallback={(e) => navigate(seeMorePetBaseUrl + item._id)}
+              redirectCallback={(e) => navigate(seeMoreItemBaseUrl + item._id)}
               showStatus={false}
               key={item.id}
               data={item}
               anotherButton={
-                <Button onClick={() => navigate(editItemBaseUrl + item.id)}>
+                <Button onClick={() => navigate(editItemBaseUrl + item._id)}>
                   Edit
                 </Button>
               }
@@ -58,7 +64,7 @@ export default function AdminItemList() {
         ))
       ) : (
         <Grid item xs={12} sm={12} md={12} lg={12}>
-          <Typography variant="h5">No Pets...</Typography>
+          <Typography variant="h5">No Items...</Typography>
         </Grid>
       )}
     </Grid>

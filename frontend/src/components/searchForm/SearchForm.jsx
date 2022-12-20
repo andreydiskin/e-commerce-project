@@ -11,16 +11,17 @@ import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import "./SearchForm.css";
 import * as yup from "yup";
-import { getPetsByQueryService } from "../../services/petsApiCalls";
+import { getItemsByQueryService } from "../../services/itemsApiCalls";
 import { toastContext } from "../../context/toastContext";
 import { CurrencyContext } from "../../context/currencyContext";
-
+const categories = /toys|electronics|food/;
 const searchValidationSchema = yup.object({
-  minHeight: yup.number("Only numbers").positive("Must be a positive number"),
-  maxHeight: yup.number("Only numbers").positive("Must be a positive number"),
-  minWeight: yup.number("Only numbers").positive("Must be a positive number"),
-  maxWeight: yup.number("Only numbers").positive("Must be a positive number"),
-  name: yup
+  categories: yup
+    .string("has to be string")
+    .matches(categories, "category must be one of the Toys,Electronics,Food"),
+  minPrice: yup.number("Only numbers").positive("Must be a positive number"),
+  maxPrice: yup.number("Only numbers").positive("Must be a positive number"),
+  title: yup
     .string()
     .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field "),
 });
@@ -28,24 +29,41 @@ const searchValidationSchema = yup.object({
 export default function SearchForm(props) {
   const [formType, setFormType] = useState("basic");
   const { openToast } = useContext(toastContext);
-  const {returnCurrencyIcon} = useContext(CurrencyContext);
+  const { returnCurrencyIcon, reverseCurrPrice } = useContext(CurrencyContext);
+  const [sortBy, setSortBy] = useState("Price");
   const formik = useFormik({
     initialValues: {
       type: "",
-      category: "",
-      name: "",
+      categories: "",
+      title: "",
       minPrice: "",
       maxPrice: "",
     },
     validationSchema: searchValidationSchema,
 
     onSubmit: async (values) => {
+      let searchedValues = { ...values };
+      if (searchedValues.minPrice)
+        searchedValues.minPrice = reverseCurrPrice(searchedValues.minPrice);
+      if (searchedValues.maxPrice)
+        searchedValues.maxPrice = reverseCurrPrice(searchedValues.maxPrice);
+
       // return an object (transfer to string)
-      const query = new URLSearchParams(values).toString();
+      const query = new URLSearchParams(searchedValues).toString();
 
       try {
         props.setIsLoading(true);
-        await getPetsByQueryService(query, props.setSearchedItems);
+        await getItemsByQueryService(query, (data) =>
+          props.setSearchedItems(() => {
+            const sortedItems = data;
+            if (sortBy === "Price") {
+              sortedItems.sort((a, b) => a.price - b.price);
+            } else {
+              sortedItems.sort((a, b) => a.title.localeCompare(b.title));
+            }
+            return [...sortedItems];
+          })
+        );
         props.setIsLoading(false);
       } catch (err) {
         openToast(err.message, "error");
@@ -58,8 +76,8 @@ export default function SearchForm(props) {
     if (formType === "basic") {
       formik.setFieldValue("minPrice", "");
       formik.setFieldValue("maxPrice", "");
-      formik.setFieldValue("category", "");
-      formik.setFieldValue("name", "");
+      formik.setFieldValue("categories", "");
+      formik.setFieldValue("title", "");
       formik.setFieldValue("type", "");
     }
   }, [formType]);
@@ -67,27 +85,13 @@ export default function SearchForm(props) {
   return (
     <Box>
       <form onSubmit={formik.handleSubmit} className="formCon">
-
         <Box>
-       
-           {/* sort mechnizem */}
+          {/* sort mechnizem */}
           <FormControl variant="standard" fullWidth>
             <InputLabel>Sort By</InputLabel>
             <Select
-
               label="Sort By"
-              onChange={(e) => 
-                props.setSearchedItems((per)=>{
-                  const sortedPets = [...per];
-                  if(e.target.value === "Price"){
-                    sortedPets.sort((a,b)=>a.price-b.price)
-                  }else{
-                    sortedPets.sort((a,b)=>a.name.localeCompare(b.name))
-                  }
-                  console.log("test",sortedPets)
-                  return [...sortedPets]
-                })
-              }
+              onChange={(e) => setSortBy(e.target.value)}
               defaultValue="Price"
               name="sortBy"
               multiple={false}
@@ -99,20 +103,19 @@ export default function SearchForm(props) {
               ))}
             </Select>
           </FormControl>
-       
 
-              <TextField
-              onChange={formik.handleChange}
-              error={formik.touched.name && Boolean(formik.errors.name)}
-              helperText={formik.touched.name && formik.errors.name}
-              onBlur={formik.handleBlur}
-              variant="standard"
-              fullWidth
-              label="Name"
-              value={formik.values.name}
-              name="name"/>
-            
-       
+          <TextField
+            onChange={formik.handleChange}
+            error={formik.touched.title && Boolean(formik.errors.title)}
+            helperText={formik.touched.title && formik.errors.title}
+            onBlur={formik.handleBlur}
+            variant="standard"
+            fullWidth
+            label="Title"
+            value={formik.values.title}
+            name="title"
+          />
+
           {formType === "advance" && (
             <>
               <FormControl variant="standard" fullWidth>
@@ -120,11 +123,11 @@ export default function SearchForm(props) {
                 <Select
                   label="Category"
                   onChange={formik.handleChange}
-                  value={formik.values.category}
-                  name="category"
+                  value={formik.values.categories}
+                  name="categories"
                   multiple={false}
                 >
-                  {["type1", "type2", "type3"].map((item) => (
+                  {["toys", "electronics", "food"].map((item) => (
                     <MenuItem key={item} value={item}>
                       {item}
                     </MenuItem>
@@ -144,9 +147,7 @@ export default function SearchForm(props) {
                   error={
                     formik.touched.minPrice && Boolean(formik.errors.minPrice)
                   }
-                  helperText={
-                    formik.touched.minPrice && formik.errors.minPrice
-                  }
+                  helperText={formik.touched.minPrice && formik.errors.minPrice}
                   onBlur={formik.handleBlur}
                 />
                 <TextField
@@ -160,12 +161,10 @@ export default function SearchForm(props) {
                   error={
                     formik.touched.maxPrice && Boolean(formik.errors.maxPrice)
                   }
-                  helperText={
-                    formik.touched.maxPrice && formik.errors.maxPrice
-                  }
+                  helperText={formik.touched.maxPrice && formik.errors.maxPrice}
                   onBlur={formik.handleBlur}
                 />
-                 </Box>
+              </Box>
             </>
           )}
         </Box>

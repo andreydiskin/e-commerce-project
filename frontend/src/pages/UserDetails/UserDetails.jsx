@@ -3,29 +3,28 @@ import { useNavigate, useParams } from "react-router-dom";
 import UserTable from "../../components/common/UserTable/UserTable";
 import { useState } from "react";
 import {
-  getFullUserDataService,
-  getUserPetsAll,
+  getUserDataService,
+  getUserOrdersService,
 } from "../../services/usersApiCalls";
 import Loader from "../../components/common/Loader/Loader";
 import { toastContext } from "../../context/toastContext";
-import ItemsGrid from "../../components/common/ItemsGrid";
-import { mockItems } from "../../Lib/data";
 
 import "./UserDetails.css";
+import MyTable from "../../components/common/MyTable";
+import { Typography } from "@mui/material";
 
 export default function UserDetails() {
   const [user, setUser] = useState(null);
-  const [pets, setPets] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [userOrders, setUserOrders] = useState([]);
   const { openToast } = useContext(toastContext);
   const { id } = useParams();
   useEffect(() => {
     const getUser = async () => {
       try {
         setIsLoading(true);
-        await getFullUserDataService(id, setUser);
-        await getUserPetsAll(id, setPets);
+        await getUserDataService(id, setUser);
+        await getUserOrdersService(id, setUserOrders);
         setIsLoading(false);
       } catch (error) {
         setIsLoading(false);
@@ -41,37 +40,49 @@ export default function UserDetails() {
   const userHeaders = [
     "Id",
     "Email",
-    "First Name",
-    "Last Name",
+    "UserName",
+    "Address",
     "Phone Number",
-    "Bio",
+    "Payment Method",
   ];
 
-  const goToPetPage = (id) => {
-    navigate(`/search/${id}`);
-  };
+  const orderHeaders = [
+    "userId",
+    "address",
+    "amount",
+    "createdAt",
+    "Phone Number",
+  ];
 
   if (!user || isLoading) {
     return <Loader />;
   }
 
+  const ordersConfig = [
+    { header: "id", ref: "userId" },
+
+    { header: "Address", ref: "address" },
+    { header: "Total price", ref: "amount" },
+    { header: "Created At", ref: "createdAt" },
+  ];
+
   const tableData = [
     user._id,
     user.email,
-    user.firstName,
-    user.lastName,
+    user.username,
+    user.address,
     user.phoneNumber,
-    user.bio,
+    user.paymentMethod,
   ];
   return (
     <div className="userDataCon">
+      <Typography variant="h4">User Details</Typography>
       <UserTable data={tableData} headers={userHeaders} id={id} />
-      <ItemsGrid
-        showStatus={false}
-        userDogs={mockItems}
-        redirectCallback={goToPetPage}
-        noDataMsg="This user currently have no pets"
-        gridColumns={8}
+      <Typography variant="h4">User Orders</Typography>
+      <MyTable
+        tableColumns={ordersConfig}
+        data={userOrders}
+        onRowClick={null}
       />
     </div>
   );

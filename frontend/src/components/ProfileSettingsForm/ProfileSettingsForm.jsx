@@ -1,12 +1,8 @@
 import React, { useContext } from "react";
-import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import "./ProfileSettingsForm.css";
-import { Alert, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
-import Button from "@mui/material/Button";
-import { useFormik } from "formik";
+import { ToggleButtonGroup, ToggleButton } from "@mui/material";
 import * as yup from "yup";
-import TextareaAutosize from "@mui/material/TextareaAutosize";
 import { authContext } from "../../context/authContext";
 import Loader from "../common/Loader/Loader";
 import { updateProfileService } from "../../services/usersApiCalls";
@@ -16,6 +12,17 @@ import { CurrencyContext } from "../../context/currencyContext";
 import { nis, usd } from "../../Lib/config";
 
 const validationSchema = yup.object({
+  address: yup.string("Enter your address").required("Address is required"),
+  paymentMethod: yup
+    .string("Pick your payment method")
+    .required("Payment method is required"),
+  secretAnswer: yup
+    .string("Enter your secret answer")
+    .required("Secret answer is required"),
+  secretQuestion: yup
+    .string("Pick your secret question")
+    .required("Secret question is required"),
+  username: yup.string("Enter your username").required("Username is required"),
   email: yup
     .string("Enter your email")
     .email("Enter a valid email")
@@ -27,12 +34,7 @@ const validationSchema = yup.object({
       "Password is not STRONG enough-should contain letters and number!"
     )
     .required("Password is required"),
-  firstName: yup
-    .string("Enter your first name.")
-    .required("First Name is required!"),
-  lastName: yup
-    .string("Enter your last name.")
-    .required("Last Name is required!"),
+
   phoneNumber: yup
     .string("Enter your phone number")
     .required("Phone number is required"),
@@ -41,10 +43,20 @@ const validationSchema = yup.object({
 const inputs = [
   { type: "text", ref: "email", label: "Email" },
   { type: "password", ref: "password", label: "Password" },
-  { type: "text", ref: "firstName", label: "First Name" },
-  { type: "text", ref: "lastName", label: "Last Name" },
+  { type: "text", ref: "username", label: "Username" },
+  {
+    type: "select",
+    ref: "secretQuestion",
+    label: "Secret Question",
+    options: [
+      { optionName: "What is your pet name?", value: "petName" },
+      { optionName: "Where were you born?", value: "birthPlace" },
+      { optionName: "What is your favorite food?", value: "favoriteFood" },
+    ],
+  },
+  { type: "text", ref: "secretAnswer", label: "Secret answer" },
   { type: "text", ref: "phoneNumber", label: "Phone Number" },
-  { ref: "shippingAddress", label: "Shipping Address", type: "text" },
+  { ref: "address", label: "Shipping Address", type: "text" },
 
   {
     ref: "paymentMethod",
@@ -55,30 +67,23 @@ const inputs = [
       { optionName: "credit", value: "Credit" },
     ],
   },
-
 ];
-
-
 
 export default function ProfileSettingsForm(props) {
   const { user, updateUser } = useContext(authContext);
   const { openToast } = useContext(toastContext);
-  const {currency, setCurrency} = useContext(CurrencyContext);
+  const { currency, setCurrency } = useContext(CurrencyContext);
 
   const defaultConfig = {
     email: user.email || "",
-    firstName: user.firstName || "",
     password: user.password || "",
-    lastName: user.lastName || "",
+    username: user.username || "",
     phoneNumber: user.phoneNumber || "",
-    bio: user.bio || "",
-    shippingAddress: user.shippingAddress || "",
+    secretQuestion: user.secretQuestion || "",
+    secretAnswer: user.secretAnswer || "",
+    address: user.address || "",
     paymentMethod: user.paymentMethod || "",
   };
-
-
-
-  
 
   const handleUpdateProfile = async (values) => {
     try {
@@ -86,37 +91,34 @@ export default function ProfileSettingsForm(props) {
       openToast("Successfully updated the profile", "success");
     } catch (err) {
       console.log("err", err);
-      openToast(err.response.data.message, "error");
+      openToast(err.message, "error");
     }
   };
-
- 
 
   if (!user) {
     return <Loader />;
   }
   return (
-
     <Box className="ProfileSettingsformCon">
-     <ToggleButtonGroup
+      <ToggleButtonGroup
         color="primary"
         value={currency}
         exclusive
-        onChange={(e,value)=>setCurrency(value)}
+        onChange={(e, value) => setCurrency(value)}
         aria-label="Platform"
       >
         <ToggleButton value={nis}>₪</ToggleButton>
         <ToggleButton value={usd}>$</ToggleButton>
       </ToggleButtonGroup>
 
-        
-      <MyForm    
-      validationSchema={validationSchema}
-          header={"Edit Profile"}
-          inputs={inputs}
-          submitMsg={"save"}
-          deafultConfig={defaultConfig}
-          callback={handleUpdateProfile}/>
+      <MyForm
+        validationSchema={validationSchema}
+        header={"Edit Profile"}
+        inputs={inputs}
+        submitMsg={"save"}
+        deafultConfig={defaultConfig}
+        callback={handleUpdateProfile}
+      />
     </Box>
   );
 }

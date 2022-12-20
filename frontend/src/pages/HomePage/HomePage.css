@@ -22,33 +22,40 @@ body {
   text-align: center;
 }
 
-.MuiBox-root.itemsShowCaseCon{
+.MuiBox-root.itemsShowCaseCon {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-width: 100%;
+  width: 100%;
   margin: auto;
   margin-bottom: 30px;
   margin-top: 30px;
 }
 
-.MuiBox-root.suggestedCardCon{
+.MuiBox-root.suggestedCardCon {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
   width: 70%;
   margin: auto;
 }
 
- .MuiPaper-root.itemShowCase {
+.MuiPaper-root.itemShowCase {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  
+
   width: 30%;
   height: 100%;
- 
+}
+
+.showCaseCategory {
+  font-family: "Playfair Display", serif;
+  font-size: 22px;
+  color: #0e052c;
+  margin-bottom: 10px;
+  margin-top: 10px;
 }

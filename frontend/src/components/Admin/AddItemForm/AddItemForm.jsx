@@ -3,7 +3,7 @@ import MyForm from "../../common/myForm/MyForm";
 import * as yup from "yup";
 import { uploadImage } from "../../../services/apicalls";
 import { useNavigate } from "react-router-dom";
-import { addItemService } from "../../../services/petsApiCalls";
+import { addItemService } from "../../../services/itemsApiCalls";
 import { toastContext } from "../../../context/toastContext";
 
 export default function AddItemForm() {
@@ -12,7 +12,6 @@ export default function AddItemForm() {
 
   const chooseFile = async (e) => {
     try {
-      console.log("e", e.target.files[0]);
       const imgName = uploadImage(e.target);
       openToast("Image uploaded", "success");
       return imgName;
@@ -21,7 +20,7 @@ export default function AddItemForm() {
     }
   };
 
-  const addPet = async (data) => {
+  const addItem = async (data) => {
     try {
       await addItemService(data, (id) => navigate(`/search/${id}`));
       openToast("Item added", "success");
@@ -39,9 +38,9 @@ export default function AddItemForm() {
 
     {
       options: [
-        { optionName: "toys", value: "Toys" },
-        { optionName: "electronics", value: "Electronics" },
-        { optionName: "food", value: "Food" },
+        { optionName: "toys", value: "toys" },
+        { optionName: "electronics", value: "electronics" },
+        { optionName: "food", value: "food" },
         ,
       ],
       type: "select",
@@ -63,7 +62,7 @@ export default function AddItemForm() {
     categories: "",
   };
 
-  const categories = /Toys|Electronics|Food/;
+  const categories = /toys|electronics|food/;
   let itemsSchema = yup.object({
     title: yup.string("name must be a string").required("Must have name field"),
 
@@ -86,7 +85,7 @@ export default function AddItemForm() {
         inputs={inputs}
         submitMsg={"Submit"}
         deafultConfig={configInputs}
-        callback={addPet}
+        callback={addItem}
       />
     </div>
   );

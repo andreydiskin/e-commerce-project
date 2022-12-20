@@ -3,7 +3,6 @@ import "./AdminDashBoard.css";
 
 import { useNavigate } from "react-router-dom";
 import MyTable from "../../../common/MyTable";
-import AdminPetList from "../AdminItemList/AdminItemList";
 import { getAllUsersService } from "../../../../services/usersApiCalls";
 import { toastContext } from "../../../../context/toastContext";
 import AdminItemList from "../AdminItemList/AdminItemList";
@@ -26,10 +25,9 @@ export default function AdminDashBoard() {
 
   const config = [
     { header: "Email", ref: "email" },
-    { header: "First", ref: "firstName" },
-    { header: "Last", ref: "lastName" },
+    { header: "Username", ref: "username" },
     { header: "Phone", ref: "phoneNumber" },
-    { header: "Bio", ref: "bio" },
+    { header: "Address", ref: "address" },
   ];
 
   const onClick = (row) => {

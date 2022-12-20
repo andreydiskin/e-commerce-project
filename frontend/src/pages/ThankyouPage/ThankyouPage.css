@@ -1,0 +1,17 @@
+.purchaseSection h1 {
+  margin-top: 50px;
+  margin-bottom: 50px;
+
+  font-size: large;
+  font-weight: bold;
+  text-align: center;
+  font-family: "Playfair Display", serif;
+  font-size: 47px;
+  color: #f35876;
+}
+
+.purchaseSection h2 {
+  margin-top: 50px;
+  margin-bottom: 50px;
+  text-align: center;
+}

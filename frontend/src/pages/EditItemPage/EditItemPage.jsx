@@ -6,34 +6,36 @@ import { CardMedia } from "@mui/material";
 import MyForm from "../../components/common/myForm/MyForm";
 import * as yup from "yup";
 import { uploadImage } from "../../services/apicalls";
-import { imagesBaseUrl, seeMorePetBaseUrl } from "../../Lib/config";
+import { imgsBucketUrl, seeMoreItemBaseUrl } from "../../Lib/config";
 import Loader from "../../components/common/Loader/Loader";
-import { getPetByIdService, updatePetById } from "../../services/petsApiCalls";
+import {
+  getItemByIdService,
+  updateItemByIdService,
+} from "../../services/itemsApiCalls";
 import { toastContext } from "../../context/toastContext";
-import { mockItems } from "../../Lib/data";
 
 export default function EditItemPage() {
   let { id } = useParams();
   const { openToast } = useContext(toastContext);
   const navigate = useNavigate();
-  const [pet, setPet] = useState(mockItems[0]);
+  const [item, setItem] = useState(null);
 
   useEffect(() => {
     //for the pic in the head
-    // const getPetById = async () => {
-    //   try {
-    //     await getPetByIdService(id, setPet);
-    //   } catch (error) {
-    //     openToast(error.message, "error");
-    //   }
-    // };
-    // getPetById();
+    const getItemById = async () => {
+      try {
+        await getItemByIdService(id, setItem);
+      } catch (error) {
+        openToast(error.message, "error");
+      }
+    };
+    getItemById();
   }, [id]);
 
   const chooseFile = async (e) => {
     try {
       const imgName = await uploadImage(e.target);
-      await updatePetById(id, { pic: imgName }, setPet);
+      await updateItemByIdService(id, { img: imgName }, setItem);
       openToast("Image uploaded", "success");
       return imgName;
     } catch (error) {
@@ -41,81 +43,62 @@ export default function EditItemPage() {
     }
   };
 
-  const updatePet = async (data) => {
+  const updateItem = async (data) => {
     try {
-      await updatePetById(id, data, setPet);
-      openToast("Pet updated", "success");
-      navigate(seeMorePetBaseUrl + id);
+      await updateItemByIdService(id, data, setItem);
+      openToast("Product updated", "success");
+      navigate(seeMoreItemBaseUrl + id);
     } catch (error) {
       openToast(error.message, "error");
     }
   };
   const inputs = [
-    { type: "text", ref: "name", label: "Name" },
+    { type: "text", ref: "title", label: "Title" },
     { type: "number", ref: "price", label: "Price" },
-    {type:"text",ref:"description",label:"Description"},
+    { type: "text", ref: "desc", label: "Description" },
+
     {
       options: [
-        { optionName: "taxable", value: "taxable" },
-        { optionName: "regular", value: "regular" },
-        { optionName: "onSale", value: "on sale" },
-      
-      ],
-      type: "select",
-      ref: "type",
-      label: "Type",
-    },
-    {
-      options: [
-        { optionName: "toys", value: "Toys" },
-        { optionName: "electronics", value: "Electronics" },
-        { optionName: "food", value: "Food" },
+        { optionName: "toys", value: "toys" },
+        { optionName: "electronics", value: "electronics" },
+        { optionName: "food", value: "food" },
         ,
       ],
       type: "select",
-      ref: "category",
+      ref: "categories",
       label: "Category",
     },
-    { onFilePick: chooseFile, type: "file", ref: "pic", label: "Picture" },
-
-
-   
-
+    { onFilePick: chooseFile, type: "file", ref: "img", label: "Picture" },
+    { ref: "size", label: "Size", type: "text" },
+    { ref: "color", label: "Color", type: "text" },
   ];
+  const categories = /toys|electronics|food/;
+  let itemsSchema = yup.object({
+    title: yup.string("name must be a string").required("Must have name field"),
 
-  const types = /taxable|regular|on sale/;
-  const categories = /Toys|Electronics|Food/;
-  let petsSchema = yup.object({
-    name: yup
-      .string("name must be a string")
-      .required("Must have name field"),
-   
-    pic: yup.mixed().required("Picture is required"),
-    type: yup
-      .string("Has to be a string")
-      .matches(
-        types,
-        "Type must be one of the taxable,regular,on sale"
-      )
-      .required("Type is required"),
-  
-      category: yup
-      .string("Has to be a string")
-      .matches(
-        categories,
-        "category must be one of the Toys,Electronics,Food"
-      )
-      .required("category Status is required"),
-    price: yup
-      .number("Has to be a  number")
-      .required("price is required"),
-    description: yup
-      .string("Has to be a  string")
-      .required("description is required"),
+    img: yup.mixed().required("Picture is required"),
 
+    categories: yup
+      .string("Has to be a string")
+      .matches(categories, "category must be one of the Toys,Electronics,Food")
+      .required("Category Status is required"),
+    price: yup.number("Has to be a  number").required("price is required"),
+    desc: yup.string("Has to be a  string").required("description is required"),
+    size: yup.string("Has to be a  string").required("size is required"),
+    color: yup.string("Has to be a  string").required("color is required"),
   });
 
-  if (!pet) {
+  const configInputs = {
+    title: item?.title,
+    img: item?.img,
+    size: item?.size,
+    color: item?.color,
+    price: item?.price,
+    desc: item?.desc,
+    categories: item?.categories[0],
+  };
+
+  if (!item) {
     return <Loader />;
   }
   return (
@@ -123,17 +106,16 @@ export default function EditItemPage() {
       <CardMedia
         component="img"
         className="editPagePetImg"
-        image={ pet.pic}
-   
+        image={imgsBucketUrl + item.img}
       />
       <Box className="editPetFormCon addItemCon">
         <MyForm
-          validationSchema={petsSchema}
+          validationSchema={itemsSchema}
           header={"Edit Item"}
           inputs={inputs}
           submitMsg={"save"}
-          deafultConfig={pet}
-          callback={updatePet}
+          deafultConfig={configInputs}
+          callback={updateItem}
         />
       </Box>
     </>

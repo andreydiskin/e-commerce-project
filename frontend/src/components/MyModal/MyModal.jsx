@@ -18,7 +18,7 @@ export default function MyModal(props) {
           isLoginModalOpen={props.isOpen}
           setIsLoginModalOpen={props.setIsOpen}
         />
-    </>
+      </>
     </Modal>
   );
 }

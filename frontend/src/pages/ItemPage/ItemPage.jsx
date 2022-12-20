@@ -1,90 +1,106 @@
 import React, { useState, useEffect } from "react";
 import "./ItemPage.css";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import { CardMedia } from "@mui/material";
-import PetDesc from "../../components/common/PetDesc";
-import IsPetAdoptedByUser from "../../components/common/IsPetAdoptedByUser";
-import { imagesBaseUrl } from "../../Lib/config";
+import { imgsBucketUrl } from "../../Lib/config";
 import { useContext } from "react";
-import { mockItems } from "../../Lib/data";
 import { authContext } from "../../context/authContext";
 
 import {
-  adoptPetService,
-  getPetByIdService,
-  returnPetService,
-  savePetService,
-} from "../../services/petsApiCalls";
+  addItemToCartService,
+  addItemToWishListService,
+  checkIfProductInWishListService,
+  getItemByIdService,
+  removeItemFromWishListService,
+} from "../../services/itemsApiCalls";
 import Loader from "../../components/common/Loader/Loader";
 import { toastContext } from "../../context/toastContext";
+import ItemDesc from "../../components/common/ItemDesc";
 
 export default function ItemPage() {
   let { id } = useParams();
+  const navigate = useNavigate();
   const { user, isUser, refreshUser } = useContext(authContext);
   const { openToast } = useContext(toastContext);
-  const [item, setItem] = useState(mockItems[0]);
+  const [item, setItem] = useState();
+  const [isLoading, setIsLoading] = useState(false);
   const [isSaved, setIsSaved] = useState();
 
   useEffect(() => {
-    // const getPet = async () => {
-    //   try {
-    //     await getPetByIdService(id, setItem);
-    //   } catch (error) {
-    //     openToast(error.message, "error");
-    //   }
-    // };
-    // getPet();
-  }, [id]);
+    const getItem = async () => {
+      try {
+        setIsLoading(true);
+        if (user._id !== undefined) {
+          await checkIfProductInWishListService(user._id, id, setIsSaved);
+        }
+        await getItemByIdService(id, setItem);
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+        openToast(error.message, "error");
+        setIsLoading(false);
+      }
+    };
 
-  useEffect(() => {
-    setIsSaved(user?.savedPets?.includes(id));
-  }, [user]);
+    getItem();
+  }, [id, user]);
 
-  const unsavePet = async () => {
+  const removeItemFromWishList = async () => {
     try {
-      await savePetService(id, false, refreshUser);
-
-      openToast("Pet unsaved", "success");
+      setIsLoading(true);
+      await removeItemFromWishListService(user._id, id, () =>
+        setIsSaved(false)
+      );
+      setIsLoading(false);
+      openToast("Item removed from wishlist", "success");
     } catch (error) {
+      console.log(error);
       openToast(error.message, "error");
+      setIsLoading(false);
     }
   };
 
-  const savePet = async () => {
+  const addItemToCart = async (itemId) => {
     try {
-      await savePetService(id, true, refreshUser);
+      setIsLoading(true);
+      // need to figure this out!!!
+      await addItemToCartService(itemId, 1, user._id, (data) => {
+        navigate("/cart");
+      });
 
-      openToast("Pet saved", "success");
+      setIsLoading(false);
+      openToast("Item added to cart", "success");
     } catch (error) {
-      openToast(error.message, "error");
+      console.log(error);
+      openToast(error.response.data.message, "error");
+      setIsLoading(false);
     }
   };
 
-  const returnPet = () => {
+  const addItemToWishList = async (itemId) => {
     try {
-      returnPetService(id, setItem);
-      openToast("Pet returned", "success");
+      setIsLoading(true);
+      await addItemToWishListService(id, user._id, () => navigate("/wishlist"));
+
+      setIsLoading(false);
+      openToast("Item added to wishlist", "success");
     } catch (error) {
-      openToast(error.message, "error");
+      console.log(error);
+      openToast(error.response.data.message, "error");
+      setIsLoading(false);
     }
   };
 
-  const adoptPet = (isAdopt) => {
-    try {
-      adoptPetService(id, isAdopt, setItem);
-      openToast(`Pet ${isAdopt ? "Adopted" : "Fosterd"}`, "success");
-    } catch (error) {
-      openToast(error.message, "error");
-    }
-  };
-  if (!item) {
+  if (isLoading) {
     return <Loader />;
   }
 
+  if (!isLoading && !item) {
+    return <h1>Item not found</h1>;
+  }
 
   return (
     <>
@@ -92,14 +108,13 @@ export default function ItemPage() {
         <CardMedia
           component="img"
           className="petImg"
-          src={item.pic}
+          src={imgsBucketUrl + item.img}
           alt="green iguana"
         />
-       
+
         <CardContent className="cardContent">
-          <PetDesc item={item} />
-         
-         </CardContent>
+          <ItemDesc item={item} />
+        </CardContent>
         {isUser && (
           <>
             <Button
@@ -107,9 +122,9 @@ export default function ItemPage() {
               variant="contained"
               color="secondary"
               size="small"
-              onClick={isSaved ? unsavePet : savePet}
+              onClick={!isSaved ? addItemToWishList : removeItemFromWishList}
             >
-              {isSaved ? "Add to wishlist " : "remove from wishlist"}
+              {!isSaved ? "Add to wishlist " : "remove from wishlist"}
             </Button>
 
             <br />
@@ -119,12 +134,10 @@ export default function ItemPage() {
               variant="contained"
               color="secondary"
               size="small"
-              onClick={ savePet}
+              onClick={() => addItemToCart(item._id)}
             >
-              { "Add to cart "}
+              {"Add to cart "}
             </Button>
-
-        
           </>
         )}
       </Card>

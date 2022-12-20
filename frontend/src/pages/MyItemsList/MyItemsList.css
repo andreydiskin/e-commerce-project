@@ -1,4 +1,4 @@
-.myPetsCon.css-j7qwjs {
+.MuiGrid-root.myPetsCon.css-j7qwjs {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -29,15 +29,13 @@
   padding-left: 0;
 }
 
-.cartTotal{
+.cartTotal {
   margin-top: 20px;
   margin-bottom: 20px;
   margin: auto;
   text-align: center;
   padding: 2%;
 }
-
-
 
 @media only screen and (max-width: 1000px) {
   .css-nen11g-MuiStack-root.myPetsCon {

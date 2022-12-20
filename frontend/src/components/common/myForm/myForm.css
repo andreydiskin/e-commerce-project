@@ -22,16 +22,12 @@
   flex-direction: column;
 }
 
-
-
-.addItemCon .myFormCon{
+.addItemCon .myFormCon {
   width: 30%;
- height: 70vh;
-
-
+  height: 70vh;
 }
 
-.addItemCon .formSubConBox{
+.addItemCon .formSubConBox {
   justify-content: space-between;
   height: 100%;
 }

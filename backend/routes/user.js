@@ -4,6 +4,7 @@ const {
   verifyTokenAndAuthorization,
   verifyTokenAndAdmin,
 } = require("./verifyToken");
+const CryptoJS = require("crypto-js");
 
 const router = require("express").Router();
 
@@ -56,14 +57,13 @@ router.get("/find/:id", verifyTokenAndAdmin, async (req, res) => {
 //GET /me
 router.get("/me", verifyToken, async (req, res) => {
   try {
-    const user  = await User.findById(req.user.id);
+    const user = await User.findById(req.user.id);
     const { password, ...others } = user._doc;
     res.status(200).json(others);
   } catch (err) {
     res.status(500).json(err);
   }
 });
-    
 
 //GET ALL USER
 router.get("/", verifyTokenAndAdmin, async (req, res) => {
@@ -99,7 +99,7 @@ router.get("/stats", verifyTokenAndAdmin, async (req, res) => {
         },
       },
     ]);
-    res.status(200).json(data)
+    res.status(200).json(data);
   } catch (err) {
     res.status(500).json(err);
   }

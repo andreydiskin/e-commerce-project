@@ -1,10 +1,7 @@
 import React, { useContext, useState } from "react";
-import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import "./LoginForm.css";
-import { Alert, Typography } from "@mui/material";
-import Button from "@mui/material/Button";
-import { useFormik } from "formik";
+import { Typography } from "@mui/material";
 import { loginApiCall } from "../../services/apicalls";
 import { authContext } from "../../context/authContext";
 import { toastContext } from "../../context/toastContext";
@@ -13,9 +10,7 @@ import ForgotPasswordForm from "./ForgotPasswordForm";
 import MyForm from "../common/myForm/MyForm";
 
 const validationSchema = yup.object({
-  userName: yup
-    .string("Enter your email")
-    .required("Email is required"),
+  userName: yup.string("Enter your email").required("Email is required"),
   password: yup.string("Enter your password").required("Password is required"),
 });
 
@@ -34,25 +29,27 @@ export default function LoginForm(props) {
   const { openToast } = useContext(toastContext);
   const [isForgotPassword, setIsForgotPassword] = useState(false);
 
+  const onSubmit = async (values) => {
+    try {
+      await loginApiCall(values, login, props.setIsLoginModalOpen);
+      openToast("Successfully Signed-Up! Happy shopping!", "success");
+    } catch (error) {
+      console.log(error);
+      openToast(error.response.data, "error");
+    }
+  };
 
-const onSubmit = async (values) => {
-  try {
-    await loginApiCall(values, login, props.setIsLoginModalOpen);
-    openToast("Successfully Logged-in", "success");
-  } catch (error) {
-    console.log(error);
-    openToast(error.message, "error");
-  }
-};
-
-  if(isForgotPassword)  return(
-    <ForgotPasswordForm setIsLoginModalOpen={props.setIsLoginModalOpen} setIsForgotPassword={setIsForgotPassword}/>)
-   ;
+  if (isForgotPassword)
+    return (
+      <ForgotPasswordForm
+        setIsLoginModalOpen={props.setIsLoginModalOpen}
+        setIsForgotPassword={setIsForgotPassword}
+      />
+    );
 
   return (
     <Box className="LoginformCon ">
       <MyForm
-
         validationSchema={validationSchema}
         header={"Login"}
         inputs={inputs}
@@ -61,11 +58,15 @@ const onSubmit = async (values) => {
         setIsLoginModalOpen={props.setIsLoginModalOpen}
         callback={onSubmit}
       />
-        <Typography onClick={()=>setIsForgotPassword(true)} variant="caption" display="block" gutterBottom>
-
-        forgat Password?
+      <Typography
+        onClick={() => setIsForgotPassword(true)}
+        variant="caption"
+        display="block"
+        gutterBottom
+        className="forgotPassword"
+      >
+        Forgot your Password?
       </Typography>
-     
     </Box>
   );
 }

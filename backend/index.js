@@ -11,6 +11,7 @@ const orderRoute = require("./routes/order");
 const stripeRoute = require("./routes/stripe");
 const uploadRoute = require("./routes/upload");
 const categoryRoute = require("./routes/category");
+const wishlistRoute = require("./routes/wishlist");
 const cors = require("cors");
 
 dotenv.config();
@@ -29,6 +30,7 @@ app.use("/api/login", loginRoute);
 app.use("/api/users", userRoute);
 app.use("/api/products", productRoute);
 app.use("/api/carts", cartRoute);
+app.use("/api/wishlists", wishlistRoute);
 app.use("/api/orders", orderRoute);
 app.use("/api/checkout", stripeRoute);
 app.use("/upload", uploadRoute);

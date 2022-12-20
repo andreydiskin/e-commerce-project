@@ -1,7 +1,15 @@
-.userDataCon .MuiCard-root.petCard{
-    margin: auto;
-    margin-bottom: 30px;
-    width: 30%;
-    /* height: 100%; */
-    text-align: center;
+.userDataCon .MuiCard-root.petCard {
+  margin: auto;
+  margin-bottom: 30px;
+  width: 30%;
+  text-align: center;
+}
+
+h4.css-5lbw0b-MuiTypography-root {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.css-1xvinid{
+  text-align: center;
 }

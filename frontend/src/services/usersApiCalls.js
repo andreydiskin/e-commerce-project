@@ -2,16 +2,17 @@ import axios from "axios";
 import { storeGetToken } from "../Auth/user";
 import {
   getAllUsersUrl,
-  getFullUsersDataUrl,
-  getUserPetsAllUrl,
+  getUserDataUrl,
+  getUserOrdersUrl,
   signUpUrl,
   updateUserUrl,
 } from "../Lib/config";
+import { loginApiCall } from "./apicalls";
 
-export const signUpService = async (data, isModalOpen) => {
+export const signUpService = async (data, isModalOpen, loginCallback) => {
   try {
     const resp = await axios.post(signUpUrl, data);
-    isModalOpen(false);
+    await loginApiCall(data, loginCallback, isModalOpen);
   } catch (error) {
     throw error;
   }
@@ -22,13 +23,12 @@ export const updateProfileService = async (id, callback, data) => {
     try {
       const config = {
         headers: {
-          authorization: storeGetToken(),
+          token: storeGetToken(),
         },
-       
       };
 
       const resp = await axios.put(updateUserUrl(id), data, config);
-      const userData = resp.data.data;
+      const userData = resp.data;
       console.log(userData);
       callback();
     } catch (error) {
@@ -41,47 +41,40 @@ export const getAllUsersService = async (callback) => {
   try {
     const config = {
       headers: {
-        authorization: storeGetToken(),
+        token: storeGetToken(),
       },
-     
     };
     const resp = await axios.get(getAllUsersUrl, config);
-    const data = resp.data.data;
+    const data = resp.data;
     callback(data);
   } catch (error) {
     throw error;
   }
 };
 
-export const getFullUserDataService = async (id, callback) => {
+export const getUserDataService = async (id, callback) => {
   try {
     const config = {
       headers: {
-        authorization: storeGetToken(),
+        token: storeGetToken(),
       },
-     
     };
-    const resp = await axios.get(getFullUsersDataUrl(id), config);
-    const data = resp.data.data;
-    callback(data);
+    const resp = await axios.get(getUserDataUrl(id), config);
+    callback(resp.data);
   } catch (error) {
     throw error;
   }
 };
 
-export const getUserPetsAll = async (userId, callback) => {
+export const getUserOrdersService = async (id, callback) => {
   try {
     const config = {
       headers: {
-        authorization: storeGetToken(),
+        token: storeGetToken(),
       },
-     
     };
-
-    const resp = await axios.get(getUserPetsAllUrl(userId), config);
-    const petData = resp.data.data;
-
-    callback(petData);
+    const resp = await axios.get(getUserOrdersUrl(id), config);
+    callback(resp.data);
   } catch (error) {
     throw error;
   }

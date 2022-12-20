@@ -1,17 +1,13 @@
 import React from "react";
-
 import Drawer from "@mui/material/Drawer";
-
 import HomeIcon from "@mui/icons-material/Home";
 import SearchIcon from "@mui/icons-material/Search";
-import PetsIcon from "@mui/icons-material/Pets";
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import "./SidePanel.css";
 import SidePanelItem from "./SidePanelItem";
-import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
-import AddIcon from '@mui/icons-material/Add';
+import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
+import AddIcon from "@mui/icons-material/Add";
 import { Divider } from "@mui/material";
 
 export default function SidePanel(props) {
@@ -43,8 +39,7 @@ export default function SidePanel(props) {
         iconCompoment={<ReceiptLongIcon />}
       />
 
-
-<Divider />
+      <Divider />
 
       <SidePanelItem
         secured={true}
@@ -53,7 +48,7 @@ export default function SidePanel(props) {
         to="/admin/additem"
         iconCompoment={<AddIcon />}
       />
-<SidePanelItem
+      <SidePanelItem
         secured={true}
         role="admin"
         linkName="Admin"

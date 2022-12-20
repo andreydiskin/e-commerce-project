@@ -1,20 +1,26 @@
-module.exports.queryFormater = (query) => {
-    let queryBuilder = {};
+const objectFormater = (obj, toPass) => {
+  return typeof obj === "object" ? { ...obj, ...toPass } : toPass;
+};
 
-    if (query["name"]) {
-      queryBuilder["name"] = { $regex: query["name"] };
-    }
-    if (query["category"]) {
-      queryBuilder["category"] = query["category"];
-    }
-    
-    if (query["maxPrice"]) {
-      queryBuilder["price"] = { $lte: query["maxPrice"] };
-    }
-    if (query["minPrice"]) {
-      queryBuilder["price"] = { $gte: query["minPrice"] };
-    }
-   
-    return queryBuilder;
-  };
-  
+module.exports.queryFormater = (query) => {
+  let queryBuilder = {};
+
+  if (query["title"]) {
+    queryBuilder["title"] = { $regex: query["title"] };
+  }
+  if (query["categories"]) {
+    queryBuilder["categories"] = query["categories"];
+  }
+
+  if (query["maxPrice"]) {
+    queryBuilder["price"] = objectFormater(queryBuilder["price"], {
+      $lte: query["maxPrice"],
+    });
+  }
+  if (query["minPrice"]) {
+    queryBuilder["price"] = objectFormater(queryBuilder["price"], {
+      $gte: query["minPrice"],
+    });
+  }
+  return queryBuilder;
+};

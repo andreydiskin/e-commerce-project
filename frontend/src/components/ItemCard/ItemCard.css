@@ -5,8 +5,6 @@
   text-decoration: none;
 }
 
-
-
 .MuiCard-root.petCard {
   margin-bottom: 40px;
   margin-top: 40px;
@@ -21,7 +19,7 @@
   width: fit-content;
 }
 
-.amountCon{
+.amountCon {
   border: 1px solid #000;
   width: fit-content;
   margin: auto;
@@ -43,4 +41,3 @@
     width: 100%;
   }
 }
-

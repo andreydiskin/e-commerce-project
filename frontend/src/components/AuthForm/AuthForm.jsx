@@ -3,7 +3,6 @@ import AppBar from "@mui/material/AppBar";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Paper from "@mui/material/Paper";
-
 import Box from "@mui/material/Box";
 import "./AuthForm.css";
 import LoginForm from "../LoginForm/LoginForm";

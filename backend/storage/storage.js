@@ -5,7 +5,7 @@ const { S3Client } = require("@aws-sdk/client-s3");
 
 require("dotenv").config();
 
-const { AWSSecretKey, AWSAccessKeyId,BUCKET_NAME} = process.env;
+const { AWSSecretKey, AWSAccessKeyId, BUCKET_NAME } = process.env;
 
 aws.config.update({
   secretAccessKey: AWSSecretKey,
