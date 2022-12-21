@@ -30,8 +30,8 @@ const validationSchema = yup.object({
   password: yup
     .string("Enter your password")
     .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?])[A-Za-z\d#$@!%&*?]{8,30}$/,
-      "Password is not STRONG enough-should contain letters and number!"
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?_])[A-Za-z\d#$@!%&*?_]{8,30}$/,
+      "Password is not strong enough - should be 8 characters long and contain letters and number!"
     )
     .required("Password is required"),
 
